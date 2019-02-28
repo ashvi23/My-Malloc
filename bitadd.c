@@ -2,16 +2,17 @@
 #include <stdbool.h>
 #define KEY 0010110011010010
 
-bitadd(unsigned char highleva2, unsigned char lowleva2, unsigned char highlevl2add, unsigned char lowlev2add){
+int bitadd(unsigned char highleva2, unsigned char lowleva2, unsigned char highlevl2add, unsigned char lowlev2add){
   //call bin2int twice. save those numbers. add ints. call int2binary. call split
     int add2int =  bin2int(unsigned char lowleva2, unsigned char highleva2);
     int toadd =  bin2int(unsigned char lowlev2a, unsigned char highlev2a);
     int newsize = add2int+toadd;
-    char[] newbinary = int2binary(newsize);
-    return newbinary;
+    return newsize;
+    //char[] newbinary = int2binary(newsize);
+    //return newbinary;
 //myfree will receive the full 16 bit char array, then call split on the array from within myfree()
 }
-bitsub(unsigned char highlevsubfrom, unsigned char lowlevsubfrom, unsigned char highlevl2sub, unsigned char lowlev2sub){
+int bitsub(unsigned char highlevsubfrom, unsigned char lowlevsubfrom, unsigned char highlevl2sub, unsigned char lowlev2sub){
   //bitsub will follow same procedure as bitadd, dont forget to call split in mymalloc()
   int sub =  bin2int(unsigned char lowlevsubfrom, unsigned char highlevsubfrom);
   int tosub =  bin2int(unsigned char lowlev2sub, unsigned char highlev2sub);
@@ -21,8 +22,7 @@ bitsub(unsigned char highlevsubfrom, unsigned char lowlevsubfrom, unsigned char 
 
 }
 //converts binary to int
-bool getBit(unsigned char byte, int position) // position in range 0-7
-{
+bool getBit(unsigned char byte, int position){ // position in range 0-7
     //copied code MODIFY
     return (byte >> position) & 0x1;
 }
@@ -54,7 +54,7 @@ int j =0;
   }
   return sum;
 }
-char* int2binary(int toconvert){
+/*char* int2binary(int toconvert){
   static char binum[16]; //idk if this works figure out types later, conversion code should work tho
   //do i need to null terminate? is this a string or a array of characters?
   int i =0;
@@ -82,7 +82,7 @@ char* int2binary(int toconvert){
   for(int i =0; i<16; i++){
     finbin[i] = binum[i];
   }
-}
+}*/
 unsgined char splitbinary(char* tosplit, int split){
   //split = 1 means high split aka obtain the high level bits
   // split == 0 means low split aka obtain the low level bits
@@ -95,9 +95,9 @@ unsgined char splitbinary(char* tosplit, int split){
   }
 }
 //unsgined char lowsplitbinary(char* tosplit){}
-/*
-http://www.java2s.com/Code/Java/Language-Basics/Setsaspecificbitofanint.htm
-MUST MODIFY
+
+//http://www.java2s.com/Code/Java/Language-Basics/Setsaspecificbitofanint.htm
+//MUST MODIFY
 public static int setBit(int bit, int target) {
        // Create mask
        int mask = 1 << bit;
@@ -105,7 +105,6 @@ public static int setBit(int bit, int target) {
        return target | mask;
     }
 
-*/
 
 //following for setting bit is from geeksforgeeks MUST MODIFY!
 //Use the bitwise OR operator (|) to set a bit.
