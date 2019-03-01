@@ -22,13 +22,13 @@ send in high and low bytes for the meta data you want to add TO   (highleva2, lo
 bit add will call a method to retreive the size bits from the whole bytes and then send that to bin2int and then add+return the resulting ints' sum
 */
 int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
-	unsigned char, high1, low1, high2, low2;
+	unsigned char, high1, high2;
 	high1 = getsize(high11);
-	low1 = getsize(low11);
+	//low1 = getsize(low11);
 	high2 = getsize(high22);
-	low2 = getsize(low22);
-	int add2 = bin2int(high1, low1);
-	int add1 = bin2int(high2, low2);
+	//low2 = getsize(low22);
+	int add2 = bin2int(high1, low11);
+	int add1 = bin2int(high2, low22);
 	int sum = add2+add1;
 	return sum;
 }
@@ -38,13 +38,13 @@ bitsub will follow same procedure as bitadd, dont forget to call split in mymall
 call method that retrieves the size bits.
  */
 int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
-	unsigned char, high1, low1, high2, low2;
+	unsigned char, high1, high2;
 	high1 = getsize(high11);
-	low1 = getsize(low11);
+	//low1 = getsize(low11);
 	high2 = getsize(high22);
-	low2 = getsize(low22);
-	int subfrom = bin2int(high1, low1);
-	int tosub = bin2int(high2, low2);
+	//low2 = getsize(low22);
+	int subfrom = bin2int(high1, low11);
+	int tosub = bin2int(high2, low22);
 	int sum = subfrom-tosub;
 	return sum;
 }
