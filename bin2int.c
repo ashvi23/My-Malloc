@@ -12,7 +12,7 @@ unsigned char getsizebits(bits);
 //send in the whole byte. returns size bits.
 unsigned char getsizebits(unsigned char bits){
 	unsigned char sizebits, mask;
-	mask = (1 << 15) -1;
+	mask = (1 << 7) -1;
 	sizebits = bits & mask;
 	return sizebits;
 }
