@@ -7,13 +7,42 @@ int bin2int(unsigned char, unsigned char);
 int getbit(int , int);
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
-int bitadd(unsigned char high1, unsigned char low1, unsigned char high2, unsigned low2){
+unsigned char getsizebits(bits);
+
+//send in the whole byte. returns size bits.
+unsigned char getsizebits(unsigned char bits){
+	unsigned char sizebits, mask;
+	mask = (1 << 15) -1;
+	sizebits = bits & mask;
+	return sizebits;
+}
+
+/*
+send in high and low bytes for the meta data you want to add TO   (highleva2, lowleva2)   send in metadata bytes for the meta data you have to add (the one youre gonna free)
+bit add will call a method to retreive the size bits from the whole bytes and then send that to bin2int and then add+return the resulting ints' sum
+*/
+int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
+	unsigned char, high1, low1, high2, low2;
+	high1 = getsize(high11);
+	low1 = getsize(low11);
+	high2 = getsize(high22);
+	low2 = getsize(low22);
 	int add2 = bin2int(high1, low1);
 	int add1 = bin2int(high2, low2);
 	int sum = add2+add1;
 	return sum;
 }
-int bitsub(unsigned char high1, unsigned char low1, unsigned char high2, unsigned low2){
+/*
+look at notes for bit add, does the same thing. highlevel/lowlevel subfrom should be the bigger number you subtract FROM
+bitsub will follow same procedure as bitadd, dont forget to call split in mymalloc()
+call method that retrieves the size bits.
+ */
+int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
+	unsigned char, high1, low1, high2, low2;
+	high1 = getsize(high11);
+	low1 = getsize(low11);
+	high2 = getsize(high22);
+	low2 = getsize(low22);
 	int subfrom = bin2int(high1, low1);
 	int tosub = bin2int(high2, low2);
 	int sum = subfrom-tosub;
@@ -24,6 +53,13 @@ int getbit(int num, int position){   //WORKS
 	int bitstate = (num >> position) &1;
 	return bitstate;
 }
+
+/*
+MUST SEND IN SIZE BYTES ONLY
+this method will NOT take inuse bit into account when converting.
+getbit will give you the bit at any given position
+send in the lowlevel and high level bits you want to convert into ints, will return the int
+*/
 int bin2int(unsigned char highbyte, unsigned char lowbyte){  //WORKS
  	int j =0;
 	int i=0;
@@ -53,6 +89,7 @@ int bin2int(unsigned char highbyte, unsigned char lowbyte){  //WORKS
 	  }
 	  return sum;
 }
+
 
 
 int main (int argc, char**argv){
