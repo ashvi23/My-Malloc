@@ -3,6 +3,7 @@
 void splitBin(unsigned int currInt, unsigned char* hiMeta, unsigned char* loMeta);
 void printBin(unsigned char hi, unsigned char lo);
 void printBinInt(unsigned int val);
+void setInUse(unsigned int inUse, unsigned char* hiMeta);
 int main(int argc, char** argv){
   unsigned int input=2;
   unsigned char hi='0';
@@ -12,10 +13,26 @@ printBin(hi, lo);
   unsigned char* ptrhi=&hi;
   unsigned char* ptrlo=&lo;
   splitBin(input, ptrhi, ptrlo);
+  setInUse(1, ptrhi);
   printBin(hi, lo);
   return 0;
 }
-
+void setInUse(unsigned int inUse, unsigned char* hiMeta){
+    unsigned int mask=1<<7;
+    unsigned int currBit=0;
+  if(inUse==0){
+    *hiMeta|=(*hiMeta & ~mask) | ((currBit << 7) & mask);
+  } else if(inUse==1){
+        currBit=1<<7;
+        *hiMeta|=(*hiMeta & ~mask) | ((currBit << 7) & mask);
+  }
+    return;
+}
+/*
+use after int arithmetic to save new sum to metadata chars
+send in an int, this extracts the bits from it and directly inserts them into the meta data chars using the given high and low byte pointers to the metadata -> int holds 615 (equiv.: 0000001001100111): *hiMeta:00000010 	*loMeta: 01100111
+(as of right now it deletes the value in the 'in use' bit when assigning the new val to the chars)
+*/
 void splitBin(unsigned int currInt, unsigned char* hiMeta, unsigned char* loMeta){
   *hiMeta=0;
   *loMeta=0;
