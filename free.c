@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+
 char* firstmeta = mem[2];
 char* firstMallocPtr = mem[4];
 char*lastaddress = mem[4095];
@@ -92,10 +96,7 @@ if (checkKey == 11474){
     do nothing. there is nothing to combine.
 
   */
-}
-unsigned char* travfree(unsigned char* curr, unsigned char* prev, ){
 
-}
 
 /*
 unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
@@ -140,30 +141,58 @@ void myfree(void *tofree, char*file, int*linenum){
 
 		char *curr = firstmeta;
 		char *prev = NULL;
-		char *next = NULL:
+		char *next = NULL;
 
 		while(curr < lastaddress ){
+			unsigned char currsizebits = getsize(curr);
+			int currsize = bin2int(currsizebits, curr+1);
+
 			if ((curr+2) > tofree){   // pointer is not pointing at the starting address of a block
 				printf("Error in %s line %d: Pointer is not the one given by malloc\n", file, linenum);
 				break;
 			}
 			if(curr+2 == tofree){
-				int isValid = isInUse(curr+2); // checks if address is already freed
+				int isValid = getbit(curr, 1); //get inuse bit
 				if (isValid == 0){  // address already freed
 					printf("Error in %s line %d: Pointer is already freed.\n", file, linenum);
 					break;
 				}
-				else if (isValid == 1){
-
-
+				else if (isValid == 1){ //this pointer can be freed
+					//free inuse bit, combine block
+					setInUse(0, curr);
+					// check if curr is the first and last block (only block)
+					if ((curr+1+currsize) == lastaddress && prev == NULL){
+						setInUse(0, curr);
+						break;
+					}
+					// check if prev is null / curr is first block
+					else{
+						if (prev == NULL){
+							next = (curr+1+currsize);
+							combineNext(curr, next);
+							break;
+						}
+					// check if curr is the last block / there is no next block
+						if((curr+1+currsize) == lastaddress){
+							combinePrev(curr, prev);
+							break;
+						}
+					// else combine both
+						else if((curr+1+currsize) < lastaddress && prev!=NULL){
+							next = (curr+1+currsize);
+							combineBoth(prev, curr, next);
+							break;
+						}
+					}
+					//break;
 				}
 
 			}
+			//update pointers
+
+			prev = curr;
+			curr = curr+1+currsize;
 		}
 	}
-
-}
-int main (int argc, char**argv){
-
 
 }

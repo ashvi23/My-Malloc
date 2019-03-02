@@ -54,6 +54,23 @@ int j =0;
   }
   return sum;
 }
+//http://www.java2s.com/Code/Java/Language-Basics/Setsaspecificbitofanint.htm
+//MUST MODIFY
+int setBit(int bit, int target) {
+       // Create mask
+       int mask = 1 << bit;
+       // Set bit
+       return target | mask;
+  }
+
+
+int main(){
+  unsigned char somebit = 0xF;
+  printf("bit: %u", somebit);
+
+
+}
+
 /*char* int2binary(int toconvert){
   static char binum[16]; //idk if this works figure out types later, conversion code should work tho
   //do i need to null terminate? is this a string or a array of characters?
@@ -83,27 +100,20 @@ int j =0;
     finbin[i] = binum[i];
   }
 }*/
-unsgined char splitbinary(char* tosplit, int split){
+/*unsgined char splitbinary(char* tosplit, int split){
   //split = 1 means high split aka obtain the high level bits
   // split == 0 means low split aka obtain the low level bits
   //https://stackoverflow.com/questions/2666440/how-to-store-binary-string-in-the-binary-form-in-a-file
   if (split ==1){
-
+    return 0;
   }
 
   else if (split ==0){
+    return;
   }
-}
+}*/
 //unsgined char lowsplitbinary(char* tosplit){}
 
-//http://www.java2s.com/Code/Java/Language-Basics/Setsaspecificbitofanint.htm
-//MUST MODIFY
-public static int setBit(int bit, int target) {
-       // Create mask
-       int mask = 1 << bit;
-       // Set bit
-       return target | mask;
-    }
 
 
 //following for setting bit is from geeksforgeeks MUST MODIFY!
