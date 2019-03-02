@@ -3,9 +3,9 @@
 /*
 CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 */
-char* firstmeta = mem[2];
-char* firstMallocPtr = mem[4];
-char*lastaddress = mem[4095];
+char* firstmeta = myMem[2];
+char* firstMallocPtr = myMem[4];
+char*lastaddress = myMem[4095];
 
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
