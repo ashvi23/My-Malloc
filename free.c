@@ -143,6 +143,9 @@ void myfree(void *tofree, char*file, int*linenum){
 		char *next = NULL:
 
 		while(curr < lastaddress ){
+			unsigned char currsizebits = getsize(curr);
+			int currsize = bin2int(currsizebits, curr+1);
+
 			if ((curr+2) > tofree){   // pointer is not pointing at the starting address of a block
 				printf("Error in %s line %d: Pointer is not the one given by malloc\n", file, linenum);
 				break;
@@ -157,28 +160,38 @@ void myfree(void *tofree, char*file, int*linenum){
 					//free inuse bit, combine block
 					setInUse(0, curr);
 					// check if curr is the first and last block (only block)
-					unsigned char currsizebits = getsize(curr);
-					int currsize = bin2int(currsizebits, curr+1);
-
-					// check if prev is null / curr is first block
-					if (prev == NULL){
-
-						combineRight(&curr, )
+					if ((curr+1+currsize) == lastaddress && prev == NULL){
+						setInUse(0, curr);
+						break;
 					}
+					// check if prev is null / curr is first block
+					else{
+						if (prev == NULL){
+							next = (curr+1+currsize);
+							combineNext(&curr, next);
+							break;
+						}
 					// check if curr is the last block / there is no next block
+						if((curr+1+currsize) == lastaddress){
+							combinePrev(curr, prev);
+							break;
+						}
 					// else combine both
-
-
-					break;
+						else if((curr+1+currsize) < lastaddress && prev!=NULL){
+							next = (curr+1+currsize);
+							combineBoth(prev, curr, next);
+							break;
+						}
+					}
+					//break;
 				}
 
 			}
 			//update pointers
+
+			prev = curr;
+			curr = curr+1+currsize;
 		}
 	}
-
-}
-int main (int argc, char**argv){
-
 
 }
