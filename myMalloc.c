@@ -19,11 +19,8 @@ at first instance of a space big enough
                         move to next
                         else    bin2Int ->compare to amount of space user asks for, if too small move on
                         else return pointer to space */
-
-  #include <stdio.h>
-  #include <stdlib.h>
 //  make global vars with the address range of the array, size of metadata, key
-void* myMalloc(int size){
+void* myMalloc(int size, __FILE__, __LINE__){
   unsigned char* first=myMem[0];
   unsigned char* second=myMem[1];
   unsigned char* ptr= myMem[0];
@@ -40,10 +37,14 @@ void* myMalloc(int size){
     setBlock(0, *hi);
   }
   if(size>usrBlock || size<0){
-    printf("Invalid amount of memory requested\n");
-    return 0;
+    if(size>usrBlock){
+    printf("Memory request exceeds size of working memory in file %d at line %d\n", __FILE__, __LINE__);
+    return NULL;
+  } else{
+    printf("Invalid memory request in file %d at line %d\n", __FILE__, __LINE__);
+  }
   }else{
-    ptr=mallocTraverse(ptr, size);
+    ptr=mallocTraverse(ptr, size);//calling the meat of the program,
   }
   return (void*)ptr;
 }
