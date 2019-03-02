@@ -6,10 +6,12 @@ unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
       char hiBits=getsizeBits(*curr);//blocking out in use bit
       int currBlockSize=(hiBits, *(curr+1));//getting block size of current block
       if(inUse==0 && currBlockSize>=dataSize){
-            //call split fxn
+          curr=splitBlock(curr, currBlockSize, dataSize);
+
       } else{
           curr=(curr+currBlockSize);
       }
+      return curr;
     }
     printf("Memory full\n");
     return NULL;
