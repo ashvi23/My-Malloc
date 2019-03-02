@@ -1,3 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+
 char* firstmeta = mem[2];
 char* firstMallocPtr = mem[4];
 char*lastaddress = mem[4095];
@@ -92,10 +96,7 @@ if (checkKey == 11474){
     do nothing. there is nothing to combine.
 
   */
-}
-unsigned char* travfree(unsigned char* curr, unsigned char* prev, ){
 
-}
 
 /*
 unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
@@ -140,7 +141,7 @@ void myfree(void *tofree, char*file, int*linenum){
 
 		char *curr = firstmeta;
 		char *prev = NULL;
-		char *next = NULL:
+		char *next = NULL;
 
 		while(curr < lastaddress ){
 			unsigned char currsizebits = getsize(curr);
@@ -168,7 +169,7 @@ void myfree(void *tofree, char*file, int*linenum){
 					else{
 						if (prev == NULL){
 							next = (curr+1+currsize);
-							combineNext(&curr, next);
+							combineNext(curr, next);
 							break;
 						}
 					// check if curr is the last block / there is no next block
