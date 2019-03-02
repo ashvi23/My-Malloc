@@ -3,19 +3,13 @@
 /*
 CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 */
-<<<<<<< HEAD
-char* firstmeta = mem[2];
-char* firstMallocPtr = mem[4];
-char*lastaddress = mem[4095];
+
 int ismeminit=0;
-=======
 char* firstmeta = myMem[2];
 char* firstMallocPtr = myMem[4];
 char* lastaddress = myMem[4095];
 char* upperBound = myMem[4095];
 char* lowerBound = myMem[0];
-int ismeminit =0;
->>>>>>> b21e01630f03c7fd95fbf6ae518f1fb3619987f7
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
 int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22);
