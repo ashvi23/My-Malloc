@@ -97,13 +97,13 @@ void combineBoth(unsigned char* prev, unsigned char* curr, unsigned char* next){
 void myfree(void *tofree, __FILE__, __LINE__){
 	tofree = (char*) tofree;
 	if (tofree == NULL){
-	printf("Error in %s line %d: Pointer received is NULL. \n", file, linenum);
+	printf("Error in %s line %d: Pointer received is NULL. \n", __FILE__, __LINE__);
 	}
 	if (ismeminit = 0){
 	printf("Error in %s line %d: Nothing malloc'd yet\n", file, linenum);
 	}
 	if(tofree<=lowerBound || tofree>upperbound){
-	printf("Error in %s line %d: Pointer is not in range of memory\n", file, linenum);
+	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
 	}
 	if(tofree>firstmeta && tofree<=lastaddress){
 
@@ -116,13 +116,13 @@ void myfree(void *tofree, __FILE__, __LINE__){
 			int currsize = bin2int(currsizebits, curr+1);
 
 			if ((curr+2) > tofree){   // pointer is not pointing at the starting address of a block
-				printf("Error in %s line %d: Pointer is not the one given by malloc\n", file, linenum);
+				printf("Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
 				break;
 			}
 			if(curr+2 == tofree){
 				int isValid = getbit(curr, 1); //get inuse bit
 				if (isValid == 0){  // address already freed
-					printf("Error in %s line %d: Pointer is already freed.\n", file, linenum);
+					printf("Error in %s line %d: Pointer is already freed.\n", __FILE__, __LINE__);
 					break;
 				}
 				else if (isValid == 1){ //this pointer can be freed
