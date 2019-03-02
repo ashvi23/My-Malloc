@@ -29,22 +29,22 @@ void* myMalloc(int size, __FILE__, __LINE__){
     int usrBlock=4092;//size of arr-metadata bits- size of key
     *ptr=key;
     ptr=ptr+2;
-    first=ptr;
+    first=ptr;//initialize metadata after key
     second=ptr+1;
     *first=0;
     *second=0;
     splitBin(usrBlock, first, second);//set metadata for new metadata block
     setBlock(0, *hi);
   }
-  if(size>usrBlock || size<0){
-    if(size>usrBlock){
-    printf("Memory request exceeds size of working memory in file %d at line %d\n", __FILE__, __LINE__);
-    return NULL;
-  } else{
-    printf("Invalid memory request in file %d at line %d\n", __FILE__, __LINE__);
-  }
+  if(size>usrBlock || size<0){//if user tries to allocate more memory than size of array/metadata/key allows for, or a negative value
+      if(size>usrBlock){
+      printf("Memory request exceeds size of working memory in file %d at line %d\n", __FILE__, __LINE__);
+      return NULL;
+    } else{
+      printf("Invalid memory request in file %d at line %d\n", __FILE__, __LINE__);
+    }
   }else{
-    ptr=mallocTraverse(ptr, size);//calling the meat of the program,
+    ptr=mallocTraverse(ptr, size);//calling the meat of the program, returns either a pointer to usable memory or a null pointer
   }
   return (void*)ptr;
 }
