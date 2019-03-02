@@ -8,7 +8,7 @@ char* firstMallocPtr = myMem[4];
 char* lastaddress = myMem[4095];
 char* upperBound = myMem[4095];
 char* lowerBound = myMem[0];
-
+int ismeminit =0;
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
 int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22);
@@ -42,6 +42,7 @@ void* mymalloc(int size, __FILE__, __LINE__){
     *second=0;
     splitBin(usrBlock, first, second);//set metadata for new metadata block
     setBlock(0, *hi);
+    ismeminit =1;
   }
   if(size>usrBlock || size<0){//if user tries to allocate more memory than size of array/metadata/key allows for, or a negative value
       if(size>usrBlock){
