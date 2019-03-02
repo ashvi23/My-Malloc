@@ -94,7 +94,7 @@ void combineBoth(unsigned char* prev, unsigned char* curr, unsigned char* next){
 	combinePrev(curr, prev);
 	}
 }
-void myfree(void *tofree, char*file, int*linenum){
+void myfree(void *tofree, __FILE__, __LINE__){
 	tofree = (char*) tofree;
 	if (tofree == NULL){
 	printf("Error in %s line %d: Pointer received is NULL. \n", file, linenum);
