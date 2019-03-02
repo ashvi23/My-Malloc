@@ -7,7 +7,7 @@ unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
       int currBlockSize=(hiBits, *(curr+1));//getting block size of current block
       if(inUse==0 && currBlockSize>=dataSize){
           curr=splitBlock(curr, currBlockSize, dataSize);
-          return curr;
+          return curr+2;
       } else{
           curr=(curr+currBlockSize);
       }
