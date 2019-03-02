@@ -5,7 +5,9 @@ CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 */
 char* firstmeta = myMem[2];
 char* firstMallocPtr = myMem[4];
-char*lastaddress = myMem[4095];
+char* lastaddress = myMem[4095];
+char* upperBound = myMem[4095];
+char* lowerBound = myMem[0];
 
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
@@ -248,7 +250,7 @@ void myfree(void *tofree, __FILE__, __LINE__){
 	if (ismeminit = 0){
 	printf("Error in %s line %d: Nothing malloc'd yet\n", file, linenum);
 	}
-	if(tofree<=lowerBound || tofree>upperbound){
+	if(tofree<=lowerBound || tofree>upperBound){
 	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
 	}
 	if(tofree>firstmeta && tofree<=lastaddress){
