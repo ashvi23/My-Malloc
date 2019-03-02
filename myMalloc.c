@@ -6,7 +6,7 @@ CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 char* firstmeta = mem[2];
 char* firstMallocPtr = mem[4];
 char*lastaddress = mem[4095];
-
+int ismeminit=0;
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
 int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22);
@@ -31,6 +31,7 @@ void* mymalloc(int size, __FILE__, __LINE__){
   unsigned char* ptr= myMem[0];
   int firstBytes=bit2int(*first, *second);
   if(firstBytes!=key){//set key to initialize method
+    ismeminit=1;
     int usrBlock=4092;//size of arr-metadata bits- size of key
     *ptr=key;
     ptr=ptr+2;
