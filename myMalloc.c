@@ -3,10 +3,19 @@
 /*
 CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 */
+<<<<<<< HEAD
 char* firstmeta = mem[2];
 char* firstMallocPtr = mem[4];
 char*lastaddress = mem[4095];
 int ismeminit=0;
+=======
+char* firstmeta = myMem[2];
+char* firstMallocPtr = myMem[4];
+char* lastaddress = myMem[4095];
+char* upperBound = myMem[4095];
+char* lowerBound = myMem[0];
+int ismeminit =0;
+>>>>>>> b21e01630f03c7fd95fbf6ae518f1fb3619987f7
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
 int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22);
@@ -41,6 +50,7 @@ void* mymalloc(int size, __FILE__, __LINE__){
     *second=0;
     splitBin(usrBlock, first, second);//set metadata for new metadata block
     setBlock(0, *hi);
+    ismeminit =1;
   }
   if(size>usrBlock || size<0){//if user tries to allocate more memory than size of array/metadata/key allows for, or a negative value
       if(size>usrBlock){
@@ -249,7 +259,7 @@ void myfree(void *tofree, __FILE__, __LINE__){
 	if (ismeminit = 0){
 	printf("Error in %s line %d: Nothing malloc'd yet\n", file, linenum);
 	}
-	if(tofree<=lowerBound || tofree>upperbound){
+	if(tofree<=lowerBound || tofree>upperBound){
 	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
 	}
 	if(tofree>firstmeta && tofree<=lastaddress){
