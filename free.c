@@ -148,17 +148,32 @@ void myfree(void *tofree, char*file, int*linenum){
 				break;
 			}
 			if(curr+2 == tofree){
-				int isValid = isInUse(curr+2); // checks if address is already freed
+				int isValid = getbit(curr, 1); //get inuse bit
 				if (isValid == 0){  // address already freed
 					printf("Error in %s line %d: Pointer is already freed.\n", file, linenum);
 					break;
 				}
-				else if (isValid == 1){
+				else if (isValid == 1){ //this pointer can be freed
+					//free inuse bit, combine block
+					setInUse(0, curr);
+					// check if curr is the first and last block (only block)
+					unsigned char currsizebits = getsize(curr);
+					int currsize = bin2int(currsizebits, curr+1);
+
+					// check if prev is null / curr is first block
+					if (prev == NULL){
+
+						combineRight(&curr, )
+					}
+					// check if curr is the last block / there is no next block
+					// else combine both
 
 
+					break;
 				}
 
 			}
+			//update pointers
 		}
 	}
 

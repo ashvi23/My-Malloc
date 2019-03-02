@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 //#include<stdbool.h>
-
+#define KEY 0010110011010010
+/*
+CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
+*/
 int bin2int(unsigned char, unsigned char);
 int getbit(int , int);
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
@@ -89,8 +92,6 @@ int bin2int(unsigned char highbyte, unsigned char lowbyte){  //WORKS
 	  }
 	  return sum;
 }
-
-
 
 int main (int argc, char**argv){
 	unsigned char high= 0b0000001;
