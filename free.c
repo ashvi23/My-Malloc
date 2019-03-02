@@ -1,6 +1,6 @@
-myfree(){
-
-}
+char* firstmeta = mem[2];
+char* firstMallocPtr = mem[4];
+char*lastaddress = mem[4095];
 void combineNext(unsigned char* curr, unsigned char* next){
 	int nextinusebit = getbit(*next, 1);
 	if (nextinusebit == 0){
@@ -93,9 +93,29 @@ if (checkKey == 11474){
 
   */
 }
-travmeta(){
+unsigned char* travfree(unsigned char* curr, unsigned char* prev, ){
 
 }
+
+/*
+unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
+    *curr=myMem[2];
+    while(curr>=lowerBound && curr<=upperbound){//lowerBound & upperBound will be global vars
+      int currMeta=bin2int(*curr, *(curr+1));
+      int inUse=getbit(currMeta, 15);//hopefully this works
+      char hiBits=getsizeBits(*curr);//blocking out in use bit
+      int currBlockSize=(hiBits, *(curr+1));//getting block size of current block
+      if(inUse==0 && currBlockSize>=dataSize){
+            //call split fxn
+      } else{
+          curr=(curr+currBlockSize);
+      }
+    }
+    printf("Memory full\n");
+    return NULL;
+}
+
+*/
 checkptr(){
 /*
 checks if the pointer given to free is a valid ptr pointing at the start of block
@@ -105,7 +125,45 @@ while()
 
 }
 
+void myfree(void *tofree, char*file, int*linenum){
+	tofree = (char*) tofree;
+	if (tofree == NULL){
+	printf("Error in %s line %d: Pointer received is NULL. \n", file, linenum);
+	}
+	if (ismeminit = 0){
+	printf("Error in %s line %d: Nothing malloc'd yet\n", file, linenum);
+	}
+	if(tofree<=lowerBound || tofree>upperbound){
+	printf("Error in %s line %d: Pointer is not in range of memory\n", file, linenum);
+	}
+	if(tofree>firstmeta && tofree<=lastaddress){
 
+		char *curr = firstmeta;
+		char *prev = NULL;
+		char *next = NULL:
+
+		while(curr < lastaddress ){
+			if ((curr+2) > tofree){   // pointer is not pointing at the starting address of a block
+				printf("Error in %s line %d: Pointer is not the one given by malloc\n", file, linenum);
+				break;
+			}
+			if(curr+2 == tofree){
+				int isValid = isInUse(curr+2); // checks if address is already freed
+				if (isValid == 0){  // address already freed
+					printf("Error in %s line %d: Pointer is already freed.\n", file, linenum);
+					break;
+				}
+				else if (isValid == 1){
+
+
+				}
+
+			}
+		}
+	}
+
+}
 int main (int argc, char**argv){
+
 
 }
