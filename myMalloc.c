@@ -3,55 +3,34 @@
 /*
 CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 */
-
+int key=11474;
 int ismeminit=0;
-char* firstmeta = myMem[2];
-char* firstMallocPtr = myMem[4];
-char* lastaddress = myMem[4095];
-char* upperBound = myMem[4095];
-char* lowerBound = myMem[0];
+char* firstmeta = &(myMem[2]);
+char* firstMallocPtr = &(myMem[4]);
+char* lastaddress = &(myMem[4095]);
+char* upperBound = &(myMem[4095]);
+char* lowerBound = &(myMem[0]);
+
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
-int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22);
-int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22);
-void combineBoth(unsigned char* prev, unsigned char* curr, unsigned char* next);
-void combineNext(unsigned char* curr, unsigned char* next);
-void combinePrev(unsigned char* curr, unsigned char* prev);
-void myfree(void *tofree, char*file, int*linenum);
-unsigned char getsizebits(bits);
-int getbit(int num, int position);
-unsigned char getsizebits(unsigned char bits);
-int bin2int(unsigned char highbyte, unsigned char lowbyte);
-unsigned char* mallocTraverse(unsigned char* curr, int dataSize);
-void setInUse(int inUse, unsigned char* hiMeta);
-void splitBin(unsigned int currInt, unsigned char* hiMeta, unsigned char* loMeta);
-unsigned char* splitBlock(unsigned char* curr, int blockSize, int dataSize);
-void* mymalloc(int size, __FILE__, __LINE__);
 
-void* mymalloc(int size, __FILE__, __LINE__){
-  unsigned char* first=myMem[0];
-  unsigned char* second=myMem[1];
-  unsigned char* ptr= myMem[0];
-  int firstBytes=bit2int(*first, *second);
+
+void* mymalloc(int size, char *filename, int linenum){
+  char* first=&(myMem[0]);
+  char* second=&(myMem[1]);
+  char* ptr= &(myMem[0]);
+  int usrBlock=4092;//size of arr-metadata bits- size of key
+  int firstBytes=bin2int(*first, *second);
   if(firstBytes!=key){//set key to initialize method
     ismeminit=1;
-    int usrBlock=4092;//size of arr-metadata bits- size of key
-    *ptr=key;
-    ptr=ptr+2;
-    first=ptr;//initialize metadata after key
-    second=ptr+1;
-    *first=0;
-    *second=0;
-    splitBin(usrBlock, first, second);//set metadata for new metadata block
-    setBlock(0, *hi);
-    ismeminit =1;
+    ptr=bootStrap(ptr, first, second, usrBlock);//set key, initialize first metadata
   }
   if(size>usrBlock || size<0){//if user tries to allocate more memory than size of array/metadata/key allows for, or a negative value
       if(size>usrBlock){
-      printf("Memory request exceeds size of working memory in file %d at line %d\n", __FILE__, __LINE__);
+      printf("Memory request exceeds size of working memory in file %s at line %d\n", __FILE__, __LINE__);
       return NULL;
     } else{
-      printf("Invalid memory request in file %d at line %d\n", __FILE__, __LINE__);
+      printf("Invalid memory request in file %s at line %d\n", __FILE__, __LINE__);
     }
   }else{
     ptr=mallocTraverse(ptr, size);//calling the meat of the program, returns either a pointer to usable memory or a null pointer
@@ -59,10 +38,10 @@ void* mymalloc(int size, __FILE__, __LINE__){
   return (void*)ptr;
 }
 
-unsigned char* splitBlock(unsigned char* curr, int blockSize, int dataSize){
-     unsigned char* hi=curr;
-     unsigned char* lo=curr+1;
-     setBlock(1, *hi);
+char* splitBlock(char* curr, int blockSize, int dataSize){
+     char* hi=curr;
+     char* lo=curr+1;
+     setInUse(1, hi);
       if((blockSize-3)>dataSize){//if block can fit at least two bytes of free space, including metadata, make free space
           splitBin(dataSize, hi, lo);//set curr's size to the size of data requested (truncating it)
           hi=curr+dataSize+2;//iterate our new pointers along
@@ -71,17 +50,17 @@ unsigned char* splitBlock(unsigned char* curr, int blockSize, int dataSize){
           *hi=0;//zero out  garbage vals in these bytes
           *lo=0;
           splitBin(blockSize, hi, lo);//set metadata for new metadata block
-          setBlock(0, *hi);
+          setInUse(0, hi);
       }
       return curr;//curr was never iterated so we can return it as-is
 }
 
-void splitBin(unsigned int currInt, unsigned char* hiMeta, unsigned char* loMeta){
+void splitBin(unsigned int currInt, char* hiMeta, char* loMeta){
   *hiMeta=0;
   *loMeta=0;
   unsigned int mask=0;
   unsigned int currBit=0;
-  for(int i=11; i>=0; i--){
+  for(int i=15; i>=0; i--){
     mask=0;
     currBit=currInt>>i;
     if(i<=7){
@@ -94,27 +73,37 @@ void splitBin(unsigned int currInt, unsigned char* hiMeta, unsigned char* loMeta
   }
     return;
 }
-
+ char* bootStrap(char* ptr, char* hi, char* lo, int usrBlock){
+    hi=ptr;//set key
+    lo=ptr+1;
+    splitBin(key, hi, lo);
+    hi=ptr+2;//initialize metadata after key
+    lo=hi+1;
+    *hi=0;
+    *lo=0;
+    splitBin(usrBlock, hi, lo);//set metadata for new metadata block
+    setInUse(0, hi);
+    return hi;
+}
 /*sets the in use bit , takes in an integer (functioning as a boolean), to tell it whether to assign the val to be either 1 or 0*/
-void setInUse(int inUse, unsigned char* hiMeta){
+void setInUse(int inUse, char* hiMeta){
     unsigned int mask=1<<7;
     unsigned int currBit=0;
   if(inUse==0){
     *hiMeta=(*hiMeta & ~mask) | ((currBit) & mask);
   } else if(inUse==1){
         currBit=1<<7;
-	unsigned int combo=(*hiMeta & ~mask);
         *hiMeta=(*hiMeta & ~mask) | ((currBit) & mask);
   }
     return;
 }
 
-unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
+char* mallocTraverse(char* curr, int dataSize){
     *curr=myMem[2];
-    while(curr>=lowerBound && curr<=upperbound){//lowerBound & upperBound will be global vars
+    while(curr>=lowerBound && curr<=upperBound){//lowerBound & upperBound will be global vars
       int currMeta=bin2int(*curr, *(curr+1));//converting chars to an int to send to getbit
       int inUse=getbit(currMeta, 1);//getting the in use bit
-      char hiBits=getsizeBits(*curr);//blocking out in use bit to get size of block
+      char hiBits=getsizebits(*curr);//blocking out in use bit to get size of block
       int currBlockSize=bin2int(hiBits, *(curr+1));//getting block size of current block
       if(inUse==0 && currBlockSize>=dataSize){//if there's enough space to return to the user
           curr=splitBlock(curr, currBlockSize, dataSize);//prepare it to return
@@ -124,11 +113,11 @@ unsigned char* mallocTraverse(unsigned char* curr, int dataSize){
       }
     }
     /* got to end of array without finding an empty block */
-    printf("Memory request exceeds size of working memory in file %d at line %d\n", __FILE__, __LINE__);
+    printf("Memory request exceeds size of working memory in file %s at line %d\n", __FILE__, __LINE__);
     return NULL;
 }
 
-int bin2int(unsigned char highbyte, unsigned char lowbyte){  //WORKS
+int bin2int(char highbyte, char lowbyte){  //WORKS
  	int j =0;
 	int i=0;
 	char binarr[15];
@@ -158,8 +147,8 @@ int bin2int(unsigned char highbyte, unsigned char lowbyte){  //WORKS
 	  return sum;
 }
 
-unsigned char getsizebits(unsigned char bits){
-	unsigned char sizebits, mask;
+char getsizebits(char bits){
+	char sizebits, mask;
 	mask = (1 << 7) -1;
 	sizebits = bits & mask;
 	return sizebits;
@@ -171,12 +160,12 @@ int getbit(int num, int position){   //WORKS
 }
 
 
-int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
-	unsigned char, high1, high2;
-	high1 = getsize(high11);
-	//low1 = getsize(low11);
-	high2 = getsize(high22);
-	//low2 = getsize(low22);
+int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned char low22){
+	char high1, high2;
+	high1 = getsizebits(high11);
+	//low1 = getsizebits(low11);
+	high2 = getsizebits(high22);
+	//low2 = getsizebits(low22);
 	int add2 = bin2int(high1, low11);
 	int add1 = bin2int(high2, low22);
 	int sum = add2+add1;
@@ -187,12 +176,12 @@ look at notes for bit add, does the same thing. highlevel/lowlevel subfrom shoul
 bitsub will follow same procedure as bitadd, dont forget to call split in mymalloc()
 call method that retrieves the size bits.
  */
-int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
-	unsigned char, high1, high2;
-	high1 = getsize(high11);
-	//low1 = getsize(low11);
-	high2 = getsize(high22);
-	//low2 = getsize(low22);
+int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned char low22){
+	unsigned char high1, high2;
+	high1 = getsizebits(high11);
+	//low1 = getsizebits(low11);
+	high2 = getsizebits(high22);
+	//low2 = getsizebits(low22);
 	int subfrom = bin2int(high1, low11);
 	int tosub = bin2int(high2, low22);
 	int sum = subfrom-tosub;
@@ -205,7 +194,7 @@ this method will NOT take inuse bit into account when converting.
 getbit will give you the bit at any given position
 send in the lowlevel and high level bits you want to convert into ints, will return the int
 */
-void combineNext(unsigned char* curr, unsigned char* next){
+void combineNext(char* curr, char* next){
 	int nextinusebit = getbit(*next, 1);
 	if (nextinusebit == 0){
 		unsigned char currlowbits = *(curr+1);
@@ -220,11 +209,11 @@ void combineNext(unsigned char* curr, unsigned char* next){
 		printf("Can't Combine. Next is in use.\n");
 	}
 }
-void combinePrev(unsigned char* curr, unsigned char* prev){
+void combinePrev(char* curr, char* prev){
 	int previnusebit = getbit(*prev, 1);
 	if (previnusebit == 0){
-		unsigned char currlowbits = *(curr+1);
-		unsigned char prevlowbits = *(prev+1);
+		char currlowbits = *(curr+1);
+		char prevlowbits = *(prev+1);
 		printf("Starting combining process. \n");
 		int sum= bitadd( *prev, prevlowbits, *curr, currlowbits);
 		splitBin(sum, curr, curr+1);
@@ -235,7 +224,7 @@ void combinePrev(unsigned char* curr, unsigned char* prev){
 		printf("Can't Combine. Next is in use.\n");
 	}
 }
-void combineBoth(unsigned char* prev, unsigned char* curr, unsigned char* next){
+void combineBoth(char* prev, char* curr, char* next){
 	int nextinuse = getbit(*next, 1);
 	int previnuse = getbit(*prev, 1);
 	if (nextinuse == 0){
@@ -245,33 +234,33 @@ void combineBoth(unsigned char* prev, unsigned char* curr, unsigned char* next){
 	combinePrev(curr, prev);
 	}
 }
-void myfree(void *tofree, __FILE__, __LINE__){
+void myfree(void *tofree, char *filename, int linenum){
 	tofree = (char*) tofree;
 	if (tofree == NULL){
 	printf("Error in %s line %d: Pointer received is NULL. \n", __FILE__, __LINE__);
 	}
-	if (ismeminit = 0){
-	printf("Error in %s line %d: Nothing malloc'd yet\n", file, linenum);
+	if (ismeminit==0){
+	printf("Error in %s line %d: Nothing malloc'd yet\n", __FILE__, __LINE__);
 	}
-	if(tofree<=lowerBound || tofree>upperBound){
+	if((char*)tofree<=(char*)lowerBound || (char*)tofree>(char*)upperBound){
 	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
 	}
-	if(tofree>firstmeta && tofree<=lastaddress){
+	if((char*)tofree>(char*)firstmeta && (char*)tofree<=(char*)lastaddress){
 
 		char *curr = firstmeta;
 		char *prev = NULL;
 		char *next = NULL;
 
 		while(curr < lastaddress ){
-			unsigned char currsizebits = getsize(curr);
-			int currsize = bin2int(currsizebits, curr+1);
+			char currsizebits = getsizebits(*(curr));
+			int currsize = bin2int(currsizebits, *(curr+1));
 
-			if ((curr+2) > tofree){   // pointer is not pointing at the starting address of a block
+			if ((char*)(curr+2) > (char*)tofree){   // pointer is not pointing at the starting address of a block
 				printf("Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
 				break;
 			}
 			if(curr+2 == tofree){
-				int isValid = getbit(curr, 1); //get inuse bit
+				int isValid = getbit(*(curr), 1); //get inuse bit
 				if (isValid == 0){  // address already freed
 					printf("Error in %s line %d: Pointer is already freed.\n", __FILE__, __LINE__);
 					break;
