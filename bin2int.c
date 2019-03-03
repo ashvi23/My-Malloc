@@ -24,8 +24,8 @@ unsigned char getsizebits(unsigned char bits){
 send in high and low bytes for the meta data you want to add TO   (highleva2, lowleva2)   send in metadata bytes for the meta data you have to add (the one youre gonna free)
 bit add will call a method to retreive the size bits from the whole bytes and then send that to bin2int and then add+return the resulting ints' sum
 */
-int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
-	unsigned char, high1, high2;
+int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned char low22){
+	unsigned char high1, high2;
 	high1 = getsize(high11);
 	//low1 = getsize(low11);
 	high2 = getsize(high22);
@@ -40,8 +40,8 @@ look at notes for bit add, does the same thing. highlevel/lowlevel subfrom shoul
 bitsub will follow same procedure as bitadd, dont forget to call split in mymalloc()
 call method that retrieves the size bits.
  */
-int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned low22){
-	unsigned char, high1, high2;
+int bitsub(unsigned char high11, unsigned char low11, unsigned char high22, unsigned char low22){
+	unsigned char high1, high2;
 	high1 = getsize(high11);
 	//low1 = getsize(low11);
 	high2 = getsize(high22);
