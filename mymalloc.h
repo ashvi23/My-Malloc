@@ -5,8 +5,6 @@
 #define free(x) myfree(x,__FILE__,__LINE__)
 
     char myMem[4096];
-    void* mymalloc(int, __FILE__, __LINE__);
-    void myfree(void*, __FILE__, __LINE__);
     void* mymalloc(int, char *filename, int linenum);
     void myfree(void*, char *filename, int linenum);
     int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsigned char low22);
@@ -22,3 +20,4 @@
     void splitBin(unsigned int currInt, char* hiMeta, char* loMeta);
     char* splitBlock(char* curr, int blockSize, int dataSize);
     char* bootStrap(char* ptr, char* hi, char* lo, int usrBlock);//set key, initialize first metadata
+	void printBin(char hi, char lo);

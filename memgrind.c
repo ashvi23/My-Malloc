@@ -1,28 +1,37 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "mymalloc.c"
+#include "mymalloc.h"
+#define malloc(x) mymalloc(x,__FILE__,__LINE__)
+#define free(x) myfree(x,__FILE__,__LINE__)
 
 int main (int argc, char**argv){
-int *ptrarr[150];
+//int *ptrarr[150];
 
-
+int*ptrarr2[150];
 // case a
 for(int i =0 ; i< 150; i++){
-  char* ptr = (char*) malloc(1 * sizeof(char));
-  free(ptr);
+printf("inside case a\n");
+  ptrarr2[i] = (int*) malloc(1);
+  free(ptrarr2[i]);
+ptrarr2[i] = NULL;
 }
+printf("case a done\n");
 
-
-//case b
+/*/case b
 
 int malcounter=0;
 int *ptr;
 for(int i =0; i< 150; i++){
-  ptrarr[malcounter] = (int*) malloc(1);
+ ptr = (int*) malloc(1);
+ ptrarr[i] =ptr;
+malcounter++;
 }
-for (int j =0; j<150;j++ ){
-  free(ptrarr[malcounter]);
+for (int j =0; j<malcounter;j++ ){
+  free(ptrarr[j]);
+	ptrarr[j]=NULL;
 }
-
+printf("case b done\n");
 // case c
 malcounter = 0;
 int freedptr = 0;
@@ -62,7 +71,7 @@ int mallocindex =0;
         ptr2free= malcounter-freedptr;
       }
     }
-
+printf("case c done\n");
   //case d
   int memleft=4092;  //the amount of memory left
   int memalloc =0; // the total of memory that is currently allocated
@@ -126,6 +135,7 @@ if(malcounter ==50){
   }
 
 }
-
+printf("case d done\n");
+*/
 return 0;
 }
