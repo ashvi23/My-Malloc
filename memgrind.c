@@ -143,11 +143,11 @@ printf("STARTING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2fr
   printf("IN OUTSIDE\n");
   	 printf("pointers: %X    ", pointers2[freeindex]);
     free(pointers2[freeindex]);
-    freeindex++;
     freedptr++;
     ptr2free = malcounter -freedptr;
-    printf("memarray: %d \n", memarr[freeindex]);
+    //printf("memarray: %d \n", memarr[freeindex]);
     memalloc = memalloc - memarr[freeindex];
+    freeindex++;
     memleft = 4092- memalloc;
     
     if(ptr2free == 0){
@@ -156,8 +156,8 @@ printf("STARTING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2fr
     printf("ENDING free:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2free: %d freeindex: %d mallocindex: %d \n", memleft, memalloc, freedptr, malcounter, ptr2free, freeindex, mallocindex);
  	}
 //}
-printf("memleftt: %d  memalloc: %d\n", memleft, memalloc);
-    printf("ENDING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2free: %d freeindex: %d mallocindex: %d \n", memleft, memalloc, freedptr, malcounter, ptr2free, freeindex, mallocindex);
+printf("ENDING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2free: %d freeindex: %d mallocindex: %d \n", memleft, memalloc, freedptr, malcounter, ptr2free, freeindex, mallocindex);
+
 printf("case d done\n");
 
 return 0;
