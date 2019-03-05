@@ -17,7 +17,7 @@ char* lowerBound = &(myMem[0]);
 
 
 void* mymalloc(int size, char *filename, int linenum){
-   printf("###############################################################\n");
+  // printf("###############################################################\n");
   char* first=&(myMem[0]);
   char* second=&(myMem[1]);
   char* ptr= &(myMem[0]);
