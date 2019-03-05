@@ -70,7 +70,7 @@ printf("in free: %X  first: %X  last: %X\n", (char*)tofree,firstmeta, lastaddres
 		while(curr <= lastaddress ){
 			char currsizebits = getsizebits(*(curr));
 			int currsize = bin2int(currsizebits, *(curr+1));
-			printf("Curr: %X \n", curr);
+			printf("\n ITERATING:Curr: %X , currsize: %d \n\n", curr, currsize);
 			if ((char*)(curr+2) > (char*)tofree){   // pointer is not pointing at the starting address of a block
 				printf("Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
 				break;
@@ -115,11 +115,13 @@ printf("isValid: %d\n", isValid);
 							break;
 						}
 					// else combine both
-						else if((curr+2+currsize) < lastaddress && prev!=NULL){
-							printf("NOT NULL\n");
+						else{
+							printf("PREV NOT NULL && NEXT NOT NULL\n");
 							next = (curr+2+currsize);
+							printf("prev: %X curr: %X next: %X currsize: %d \n", prev, curr, next, currsize);
 							combineBoth(prev, curr, next);
 							printf("combined both\n");
+							
 							break;
 						}
 						
@@ -133,7 +135,7 @@ printf("isValid: %d\n", isValid);
 printBin(*(curr), *(curr+1));
 			prev = curr;
 printf("Curr before %X  Curr+1:%X   Curr Now: ", curr, curr+1);
-			curr = (char*)(curr+1+currsize);
+			curr = (char*)(curr+2+currsize);
 printf("%X    Currsize:%d   \n", curr, currsize);
 
 		}
@@ -363,13 +365,15 @@ void combineNext(char* curr, char* next){
 	
 }
 void combinePrev(char* curr, char* prev){
-	int previnusebit = getbit(*prev, 8);
+	int previnusebit = getbit(*prev, 7);
 	if (previnusebit == 0){
 		char currlowbits = *(curr+1);
 		char prevlowbits = *(prev+1);
 		printf("Starting combining process. \n");
-		int sum= 2+ bitadd( *prev, prevlowbits, *curr, currlowbits);
-		splitBin(sum, curr, curr+1);
+		int sum= bitadd( *prev, prevlowbits, *curr, currlowbits);
+		sum = sum+2;
+		//printf();
+		splitBin(sum, prev, prev+1);
 		setInUse(0, prev);
 		printf("Curr and Prev combined.\n");
 	}
@@ -378,14 +382,18 @@ void combinePrev(char* curr, char* prev){
 	}
 }
 void combineBoth(char* prev, char* curr, char* next){
-	int nextinuse = getbit(*next, 8);
-	int previnuse = getbit(*prev, 8);
+	int nextinuse = getbit(*next, 7);
+	int previnuse = getbit(*prev, 7);
 	if (nextinuse == 0){
 	combineNext(curr, next);
 	}
 	if (previnuse == 0){
 	combinePrev(curr, prev);
 	}
+	
+	int abc = bin2int(*(prev),*(prev+1));
+	printf("\n\n FINAL BLOCK:  %d \n\n", abc);
+	
 }
 void printBin(char hi, char lo){
 	int shift=0;
