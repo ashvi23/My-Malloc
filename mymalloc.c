@@ -336,12 +336,12 @@ void combineNext(char* curr, char* next){
 	if (nextinusebit == 0){
 		char currlowbits = *(curr+1);
 		char nextlowbits = *(next+1);
-		printf("Starting combining process. \n");
+		//printf("Starting combining process. \n");
 		char currhibits=getsizebits(*curr);
 	    char nexthibits=getsizebits(*next);
 		int currNum=bin2int(currhibits, currlowbits);
 		int nextNum=bin2int(nexthibits,nextlowbits);
-		printf("currnum: %d \n nextnum: %d\n", currNum, nextNum);
+		printf("curr size: %d \n next size: %d\n", currNum, nextNum);
 		printf("curr: ");
 		printBin(*(curr), *(curr+1));
 		printf("next: ");
@@ -358,6 +358,8 @@ void combineNext(char* curr, char* next){
 		char hibyte=getsizebits(*curr);
 		int currsize=bin2int(hibyte, *(curr+1));
 		printf("size of combined block: %d\n", currsize);
+		int abc = bin2int(*(curr),*(curr+1));
+		printf("\n\n NEXT+CURR BLOCK:  %d \n\n", abc);
 	}
 	else if (nextinusebit ==1){
 		printf("Can't Combine. Next is in use.\n");
@@ -376,6 +378,8 @@ void combinePrev(char* curr, char* prev){
 		splitBin(sum, prev, prev+1);
 		setInUse(0, prev);
 		printf("Curr and Prev combined.\n");
+			int abc = bin2int(*(prev),*(prev+1));
+		printf("\n\n PREC+CURR BLOCK:  %d \n\n", abc);
 	}
 	else if (previnusebit ==1){
 		printf("Can't Combine. Prev is inuse.\n");
@@ -384,15 +388,16 @@ void combinePrev(char* curr, char* prev){
 void combineBoth(char* prev, char* curr, char* next){
 	int nextinuse = getbit(*next, 7);
 	int previnuse = getbit(*prev, 7);
+	printf("nextinuse bit: %d  prev inuse bit:  %d\n", nextinuse, previnuse);
 	if (nextinuse == 0){
 	combineNext(curr, next);
 	}
 	if (previnuse == 0){
 	combinePrev(curr, prev);
+
 	}
 	
-	int abc = bin2int(*(prev),*(prev+1));
-	printf("\n\n FINAL BLOCK:  %d \n\n", abc);
+
 	
 }
 void printBin(char hi, char lo){

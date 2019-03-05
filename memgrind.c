@@ -6,8 +6,8 @@
 #define free(x) myfree(x,__FILE__,__LINE__)
 
 int main (int argc, char**argv){
-//int *ptrarr[150];
 
+/*
 int*ptrarr2[150];
 // case a
 for(int i =0 ; i< 150; i++){
@@ -18,8 +18,8 @@ ptrarr2[i] = NULL;
 }
 printf("case a done\n");
 
-/*/case b
-
+//case b
+int *ptrarr[150];
 int malcounter=0;
 int *ptr;
 for(int i =0; i< 150; i++){
@@ -32,46 +32,53 @@ for (int j =0; j<malcounter;j++ ){
 	ptrarr[j]=NULL;
 }
 printf("case b done\n");
+*/
 // case c
-malcounter = 0;
+int malcounter = 0;
 int freedptr = 0;
-int ptr2free =malcounter - freedptr;
+int ptr2free =-1;
 int freeindex =0;
 int* pointers[50];
 int mallocindex =0;
-
-  int random = rand()%2;
+  int random;
   while(malcounter <=50){
+   random = rand()%2;
+   printf("\n\n*************  START  *********************\n");
+    printf("\nrandom: %d\n",random);
     if(random == 0){ //malloc if 0
       pointers[mallocindex] = (int*)malloc(1);
       malcounter++;
       mallocindex++;
+      ptr2free =malcounter - freedptr;
     }
     else if (random == 1){ // free if 1
-      if (ptr2free != 0){
+    printf("\n\nptr2free  %d , malcounter  %d freedptr %d free index %d \n\n", ptr2free, malcounter, freedptr, freeindex);
+      if (ptr2free != 0 && malcounter!=0){
+      printf("\n\nhello\n\n");
         free(pointers[freeindex]);
         pointers[freeindex] = NULL;
-        freeindex++;
-        freedptr++;
+        ++freeindex;
+        ++freedptr;
         ptr2free =malcounter - freedptr;
       }
-
+     // printf("didnt go in free\n");
     }
-    if(malcounter== 50){
-      break;
+    if(malcounter == 50){
+    break;}
+    printf("\n*************  END *********************\n");
     }
-    random = rand()%2;
-    }
-    if (malcounter == 50){
+  //  if (malcounter == 50){
       while(ptr2free!= 0){
+      printf("free left over\n");
         free(pointers[freeindex]);
         pointers[freeindex] = NULL;
-        freedptr++;
-        freeindex++;
+        ++freedptr;
+        ++freeindex;
         ptr2free= malcounter-freedptr;
       }
-    }
+   //}
 printf("case c done\n");
+/*
   //case d
   int memleft=4092;  //the amount of memory left
   int memalloc =0; // the total of memory that is currently allocated
@@ -102,9 +109,7 @@ while(malcounter<=50){
         mallocindex++;
         malcounter++;
         memleft-=random;
-
       }
-
     }
     else if (random ==1){//free if odd
       if(ptr2free!=0){
@@ -114,7 +119,6 @@ while(malcounter<=50){
         freedptr++;
         ptr2free = malcounter-freedptr;
         memleft = 4092- memalloc;
-
       }
     }
   }
@@ -128,12 +132,10 @@ if(malcounter ==50){
     freeindex++;
     freedptr++;
     ptr2free = malcounter -freedptr;
-
     if(ptr2free == 0){
       break;
     }
   }
-
 }
 printf("case d done\n");
 */
