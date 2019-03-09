@@ -7,22 +7,36 @@
 #define free(x) myfree(x,__FILE__,__LINE__)
 
 int main (int argc, char**argv){
-
+time_t starttime;
+time_t endtime;
+double difference=0;
+//double sumtimeA=0;
+//double sumtimeB=0;
+//double sumtimeC=0;
+double sumtimeD=0;
+double sumtimeE=0;
+double sumtimeF=0;
+//int *ptrarr[150];
+//int*ptrarr2[150];
 /*
 int*ptrarr2[150];
 // case a
+time(&starttime);//get time at start
 for(int i =0 ; i< 150; i++){
 printf("inside case a\n");
   ptrarr2[i] = (int*) malloc(1);
   free(ptrarr2[i]);
 ptrarr2[i] = NULL;
 }
+time(&endtime);//get time at end
+difference=difftime(endtime, starttime);//save runtime of iteration
+sumtimeA+=difference;
 printf("case a done\n");
-
 //case b
 int *ptrarr[150];
 int malcounter=0;
 int *ptr;
+time(&starttime);//get time at start
 for(int i =0; i< 150; i++){
  ptr = (int*) malloc(1);
  ptrarr[i] =ptr;
@@ -32,6 +46,9 @@ for (int j =0; j<malcounter;j++ ){
   free(ptrarr[j]);
 	ptrarr[j]=NULL;
 }
+time(&endtime);//get time at end
+difference=difftime(endtime, starttime);//save runtime of iteration
+sumtimeB+=difference;
 printf("case b done\n");
 */
 // case c
@@ -44,6 +61,7 @@ int mallocindex =0;
   int random;
  srand(time(NULL));
   /*
+time(&starttime);//get time at start
   while(malcounter <=50){
    random = rand()%2;
    printf("\n\n*************  START  *********************\n");
@@ -80,6 +98,9 @@ int mallocindex =0;
         ptr2free= malcounter-freedptr;
       }
    //}
+time(&endtime);//get time at end
+difference=difftime(endtime, starttime);//save runtime of iteration
+sumtimeC+=difference;
 printf("case c done\n");
 /*
 */
@@ -95,6 +116,7 @@ printf("case c done\n");
   int memarr[50];// stores the amount of memory mallocd on each malloc
   //int mem;
 //  int random = rand()
+time(&starttime);//get time at start
 while(malcounter<=50){
  printf("\n\n*************  START  *********************\n\n");
 printf("STARTING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2free: %d freeindex: %d mallocindex: %d \n", memleft, memalloc, freedptr, malcounter, ptr2free, freeindex, mallocindex);
@@ -157,8 +179,62 @@ printf("STARTING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2fr
  	}
 //}
 printf("ENDING:  memleftt: %d  memalloc: %d freedptr: %d malcounter: %d ptr2free: %d freeindex: %d mallocindex: %d \n", memleft, memalloc, freedptr, malcounter, ptr2free, freeindex, mallocindex);
-
+time(&endtime);//get time at end
+difference=difftime(endtime, starttime);//save runtime of iteration
+sumtimeD+=difference;
 printf("case d done\n");
-
+//case E
+int *fiboptrArr[100];
+int prevprev=0;
+int prev=1;
+int sum=0;
+int totalmem=0;
+int index=0;
+while(totalmem<(4092/2)){
+	sum=prevprev+prev;
+	fiboptrArr[index]= (int*)malloc(sum);
+	prevprev=prev;
+	prev=sum;
+	totalmem+=sum;
+	index++;
+}
+while(totalmem<(4092)&& sum>1){
+	sum=prev-prevprev;
+	fiboptrArr[index]= (int*)malloc(sum);
+	prev=prevprev;
+	prevprev=sum;
+	totalmem+=sum;
+	index++;
+}
+for(int i=index; i>=0; i--){
+	printf("in E\n");
+	free(fiboptrArr[i]);
+}
+	//fiboptrArr[0]=malloc(4092);
+	//fiboptrArr[1]=malloc(1);
+	//free(fiboptrArr[0]);
+//end of E
+//begin of F
+	srand(time(0));
+	int* alternptrArr[250];
+	index=0;
+	random=0;
+	while(sum!=4092 && index<250){
+		if(index%4==0){
+			printf("in F\n");
+			free(alternptrArr[index-1]);//every third element gets freed
+			}
+		random=abs(rand()%64);
+		alternptrArr[index]=random;
+		index++;
+	}
+//print mean times
+//printf("Mean time of protocol A was %lf\n", (sumtimeA/100));
+//printf("Mean time of protocol B was %lf\n", (sumtimeB/100));
+//printf("Mean time of protocol C was %lf\n", (sumtimeC/100));
+printf("Mean time of protocol D was %lf\n", (sumtimeD/100));
+printf("Mean time of protocol E was %lf\n", (sumtimeE/100));
+printf("Mean time of protocol F was %lf\n", (sumtimeF/100));
 return 0;
 }
+
