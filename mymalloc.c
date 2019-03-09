@@ -163,8 +163,8 @@ char* splitBlock(char* curr, int blockSize, int dataSize){
      char* lo=curr+1; 
      //printf("in split block:  ");
 	//printBin(*(hi), *(lo));
-      if((blockSize-3)>=dataSize){//if block can fit at least two bytes of free space, including metadata, make free space
-         // printf("am i in line 126?\n");
+      if((blockSize-3)>dataSize){//if block can fit at least two bytes of free space, including metadata, make free space
+         printf("DOING THE SPLITS\n");
           splitBin(dataSize, hi, lo);//set curr's size to the size of data requested (truncating it)
      	//printf("line 128:    ");
      	//printBin(*(hi), *(lo));
@@ -246,9 +246,9 @@ char* mallocTraverse(char* curr, int dataSize){
       //break;
       char hiBits=getsizebits(*curr);//blocking out in use bit to get size of block
       int currBlockSize=bin2int(hiBits, *(curr+1));//getting block size of current block
-      //printf("in use: %d curr block: %d, datasize: %d\n", inUse, currBlockSize, dataSize);
-	//  printf("current metadata in traverse: ");
-    //  printBin(*(curr),*(curr+1));
+      printf("in use: %d curr block: %d, datasize: %d\n", inUse, currBlockSize, dataSize);
+	  printf("current metadata in traverse: ");
+      printBin(*(curr),*(curr+1));
       if(inUse==0 && currBlockSize>=dataSize){//if there's enough space to return to the user
       	  printf("currBlockSize: %d\n", currBlockSize);
           curr=splitBlock(curr, currBlockSize, dataSize);//prepare it to return
