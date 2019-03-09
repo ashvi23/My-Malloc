@@ -118,7 +118,7 @@ printf("isValid: %d\n", isValid);
 							return;
 						}
 					// check if curr is the last block / there is no next block
-						if((curr+2+currsize) == (&(myMem[4095]))){
+						if((curr+1+currsize) == (&(myMem[4095]))){
 							printf("NEXT IS NULL\n");
 							combinePrev(curr, prev);
 							printf("last block\n");
