@@ -1,16 +1,14 @@
 #include "mymalloc.h"
-
 //#include<stdbool.h>
 /*
 CONTAINS: getbit, setbit, bin2int, bitadd, bitsub, getsizebits
 */
-int key=11474;
-int ismeminit=0;
-char* firstmeta = &(myMem[2]);
-char* firstMallocPtr = &(myMem[4]);
-char* lastaddress = &(myMem[4095]);
-char* upperBound = &(myMem[4095]);
-char* lowerBound = &(myMem[0]);
+//int key=11474;
+//int ismeminit=0;
+//char* firstMallocPtr = &(myMem[4]);
+//char* lastaddress = &(myMem[4095]);
+//char* upperBound = &(myMem[4095]);
+//char* lowerBound = &(myMem[0]);
 
 //int adding(unsigned char, unsigned char, unsigned char, unsigned char);
 //int bitsub(unsigned char, unsigned char, unsigned char, unsigned char);
@@ -23,8 +21,8 @@ void* mymalloc(int size, char *filename, int linenum){
   char* ptr= &(myMem[0]);
   int usrBlock=4092;//size of arr-metadata bits- size of key
   int firstBytes=bin2int(*first, *second);
-  if(firstBytes!=key){//set key to initialize method
-    ismeminit=1;
+  if(firstBytes!=KEY){//set key to initialize method
+    //ismeminit=1;
     ptr=bootStrap(ptr, first, second, usrBlock);//set key, initialize first metadata
     //printf("safe returns from bootstrap\n");
   }
@@ -48,27 +46,31 @@ void* mymalloc(int size, char *filename, int linenum){
 }
 
 void myfree(void *tofree, char *filename, int linenum){
+	char* firstmeta = &(myMem[2]);
 	printf("hello from free:    \n");
 	tofree = (char*) tofree;
+	char* first=&(myMem[0]);//set pointer to first index of arr
+	char* second=&(myMem[1]);//set pointer to second byte of arr
+	int firstbytes=bin2int(*first, *second);
 	//printf("metadata being freed: ");
 	//printBin(*((char*)(tofree)-2), *((char*)(tofree)-1));
 	if (tofree == NULL){
 	printf("Error in %s line %d: Pointer received is NULL. \n", __FILE__, __LINE__);
 	}
-	if (ismeminit==0){
+	if(firstbytes!=KEY){
 	printf("Error in %s line %d: Nothing malloc'd yet\n", __FILE__, __LINE__);
 	}
-	if((char*)tofree<=(char*)lowerBound || (char*)tofree>(char*)upperBound){
+	if((char*)tofree<=(char*)(&(myMem[2]))|| (char*)tofree>(char*)(&(myMem[4095]))){
 	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
 	}
-printf("in free: %X  first: %X  last: %X\n", (char*)tofree,firstmeta, lastaddress);	
-	if((char*)tofree>=(char*)firstmeta && (char*)tofree<=(char*)lastaddress){
+printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myMem[4095])));	
+	if((char*)tofree>=(char*)(&(myMem[2])) && (char*)tofree<=(char*)(&(myMem[4095]))){
 
 		char *curr = firstmeta;
 		char *prev = NULL;
 		char *next = NULL;
 
-		while(curr <= lastaddress ){
+		while(curr <= (&(myMem[4095]))){
 			char currsizebits = getsizebits(*(curr));
 			int currsize = bin2int(currsizebits, *(curr+1));
 			printf("\n ITERATING:Curr: %X , currsize: %d \n\n", curr, currsize);
@@ -93,7 +95,7 @@ printf("isValid: %d\n", isValid);
 					printf("in pointer can be freed\n");
 					setInUse(0, curr);
 					// check if curr is the first and last block (only block)
-					if ((curr+2+currsize) == lastaddress && prev == NULL){
+					if ((curr+2+currsize) == (&(myMem[4095])) && prev == NULL){
 						setInUse(0, curr);
 						printf("first and last block\n");
 						break;
@@ -110,7 +112,7 @@ printf("isValid: %d\n", isValid);
 							break;
 						}
 					// check if curr is the last block / there is no next block
-						if((curr+2+currsize) == lastaddress){
+						if((curr+2+currsize) == (&(myMem[4095]))){
 							printf("NEXT IS NULL\n");
 							combinePrev(curr, prev);
 							printf("last block\n");
@@ -195,7 +197,7 @@ void splitBin(unsigned int currInt, char* hiMeta, char* loMeta){
     //printf("bootstrap babeyy\n");
     hi=ptr;//set key
     lo=ptr+1;
-    splitBin(key, hi, lo);
+    splitBin(KEY, hi, lo);
     hi=ptr+2;//initialize metadata after key
     lo=hi+1;
     *hi=0;
@@ -227,7 +229,7 @@ char* mallocTraverse(char* curr, int dataSize){
 	//printf("curr at begining of traverse: \n");
 	//printBin(*(curr),*(curr+1));
     //printf("datasize: %d   \n", dataSize);
-    while(curr>=lowerBound && curr<upperBound){//lowerBound & upperBound will be global vars
+    while(curr>=(&(myMem[2])) && curr<(&(myMem[4095]))){//lowerBound & upperBound will be global vars
       int currMeta=bin2int(*curr, *(curr+1));//converting chars to an int to send to getbit
       int inUse=getbit(currMeta, 15);//getting the in use bit
     //  printf("MALLOC TRAV: in use: %d\n", inUse);
