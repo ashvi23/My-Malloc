@@ -93,17 +93,18 @@ printf("INSIDE POINTER EQUALS FREE\n");
 printf("isValid: %d\n", isValid);
 				if (isValid == 0){  // address already freed
 					printf("Error in %s line %d: Pointer is already freed.\n", __FILE__, __LINE__);
-					break;
+					return;
+					
 				}
 				else if (isValid == 1){ //this pointer can be freed
 					//free inuse bit, combine block
 					printf("in pointer can be freed\n");
 					setInUse(0, curr);
 					// check if curr is the first and last block (only block)
-					if ((curr+2+currsize) == (&(myMem[4095])) && prev == NULL){
+					if ((curr+1+currsize) == (&(myMem[4095])) && prev == NULL){
 						setInUse(0, curr);
 						printf("first and last block\n");
-						break;
+						return;
 					}
 					// check if prev is null / curr is first block
 					else{
@@ -114,7 +115,7 @@ printf("isValid: %d\n", isValid);
 							printBin(*(next), *(next+1));
 							combineNext(curr, next);
 							printf("first block \n");
-							break;
+							return;
 						}
 					// check if curr is the last block / there is no next block
 						if((curr+2+currsize) == (&(myMem[4095]))){
@@ -162,7 +163,7 @@ char* splitBlock(char* curr, int blockSize, int dataSize){
      char* lo=curr+1; 
      //printf("in split block:  ");
 	//printBin(*(hi), *(lo));
-      if((blockSize-3)>dataSize){//if block can fit at least two bytes of free space, including metadata, make free space
+      if((blockSize-3)>=dataSize){//if block can fit at least two bytes of free space, including metadata, make free space
          // printf("am i in line 126?\n");
           splitBin(dataSize, hi, lo);//set curr's size to the size of data requested (truncating it)
      	//printf("line 128:    ");
@@ -178,7 +179,7 @@ char* splitBlock(char* curr, int blockSize, int dataSize){
           splitBin(blockSize, hi, lo);//set metadata for new metadata block
           setInUse(0, hi);
       }else{
-      	 splitBin(dataSize, hi, lo);
+      	 splitBin(blockSize, hi, lo);
      	 setInUse(1, hi);
       }
       return curr;//curr was never iterated so we can return it as-is
@@ -383,9 +384,18 @@ void combinePrev(char* curr, char* prev){
 		char currlowbits = *(curr+1);
 		char prevlowbits = *(prev+1);
 		printf("Starting combining process. \n");
+		printf("curr: ");
+		printBin(*(curr), *(curr+1));
+		printf("prev: ");
+		printBin(*(prev), *(prev+1));
+		
 		int sum= bitadd( *prev, prevlowbits, *curr, currlowbits);
 		sum = sum+2;
-		//printf();
+		printf("sum: %d\n", sum);
+		printf("prev and curr binaries :");
+		printBin(*(prev), *(prev +1));
+		printBin(*(curr), *(curr +1));
+		
 		splitBin(sum, prev, prev+1);
 		setInUse(0, prev);
 		char hibyte=getsizebits(*prev);

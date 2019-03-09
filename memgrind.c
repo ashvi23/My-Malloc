@@ -7,6 +7,8 @@
 #define free(x) myfree(x,__FILE__,__LINE__)
 
 int main (int argc, char**argv){
+/*
+for(int v =0; v <100; v++){
 time_t starttime;
 time_t endtime;
 double difference=0;
@@ -112,7 +114,7 @@ difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeC+=difference;
 printf("case c done\n");
 /*
-*/
+
   //case d
   int memleft=4092;  //the amount of memory left
   int memalloc =0; // the total of memory that is currently allocated
@@ -244,5 +246,36 @@ for(int i=index; i>=0; i--){
 printf("Mean time of protocol D was %lf\n", (sumtimeD/100));
 printf("Mean time of protocol E was %lf\n", (sumtimeE/100));
 printf("Mean time of protocol F was %lf\n", (sumtimeF/100));
+}
+*/
+int*x = (int*) malloc(4092);
+int* a = (int*)malloc(1);
+free(x);
+free(a);
+
+printf("case 1 done\n \n \n");
+
+
+char*y = (char*) malloc(4088);
+short*z = (short*)malloc(1);
+free(y);
+free(z);
+printf("case 2 done\n \n \n");
+/*
+char*b = (char*) malloc(5000);
+free(b);
+printf("case 3 done\n \n \n");
+
+
+char*c = (char*) malloc(-5000);
+free(c);
+printf("case 4 done\n \n \n");
+
+
+char*d = (char*) malloc(0);
+free(d);
+printf("case 5 done\n \n \n");
+*/
+
 return 0;
 }
