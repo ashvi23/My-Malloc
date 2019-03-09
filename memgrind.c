@@ -33,19 +33,28 @@ difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeA+=difference;
 printf("case a done\n");
 //case b
-int *ptrarr[150];
+
+int *ptrarr[50];
 int malcounter=0;
 int *ptr;
 time(&starttime);//get time at start
-for(int i =0; i< 150; i++){
- ptr = (int*) malloc(1);
- ptrarr[i] =ptr;
-malcounter++;
+for(int x =0; x<3; x++){
+for(int i =0; i< 50; i++){
+	ptr = (int*) malloc(1);
+	ptrarr[i] =ptr;
+	malcounter++;
+	if(malcounter == 50){
+		for (int j =0; j<malcounter;j++ ){
+		 	free(ptrarr[j]);
+			ptrarr[j]=NULL;
+
+	}
+	malcounter =0;
 }
-for (int j =0; j<malcounter;j++ ){
-  free(ptrarr[j]);
-	ptrarr[j]=NULL;
 }
+}
+
+
 time(&endtime);//get time at end
 difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeB+=difference;
@@ -237,4 +246,3 @@ printf("Mean time of protocol E was %lf\n", (sumtimeE/100));
 printf("Mean time of protocol F was %lf\n", (sumtimeF/100));
 return 0;
 }
-
