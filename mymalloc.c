@@ -379,11 +379,15 @@ void combinePrev(char* curr, char* prev){
 		//printf();
 		splitBin(sum, prev, prev+1);
 		setInUse(0, prev);
+		char hibyte=getsizebits(*prev);
+		int currsize=bin2int(hibyte, *(prev+1));
+		printf("size of combined block: %d\n", currsize);
 		printf("Curr and Prev combined.\n");
 	}
 	else if (previnusebit ==1){
 		printf("Can't Combine. Prev is inuse.\n");
 	}
+
 }
 void combineBoth(char* prev, char* curr, char* next){
 	int nextinuse = getbit(*next, 7);
@@ -393,10 +397,11 @@ void combineBoth(char* prev, char* curr, char* next){
 	}
 	if (previnuse == 0){
 	combinePrev(curr, prev);
-	}
-	
 	int abc = bin2int(*(prev),*(prev+1));
 	printf("\n\n FINAL BLOCK:  %d \n\n", abc);
+	}
+	
+	printf("next in use bit: %d  prev in use bit: %d\n" ,nextinuse, previnuse );
 	
 }
 void printBin(char hi, char lo){
