@@ -54,14 +54,18 @@ void myfree(void *tofree, char *filename, int linenum){
 	int firstbytes=bin2int(*first, *second);
 	//printf("metadata being freed: ");
 	//printBin(*((char*)(tofree)-2), *((char*)(tofree)-1));
-	if (tofree == NULL){
+	printf("TO FREE ADDRESS: %X \n", (char*)tofree);
+	if ((char*)tofree == NULL){
 	printf("Error in %s line %d: Pointer received is NULL. \n", __FILE__, __LINE__);
+	return;
 	}
-	if(firstbytes!=KEY){
+	if(firstbytes!= KEY){
 	printf("Error in %s line %d: Nothing malloc'd yet\n", __FILE__, __LINE__);
+	return;
 	}
-	if((char*)tofree<=(char*)(&(myMem[2]))|| (char*)tofree>(char*)(&(myMem[4095]))){
+	if((char*)tofree<(char*)(&(myMem[2])) || (char*)tofree>(char*)(&(myMem[4095]))){
 	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
+	return;
 	}
 printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myMem[4095])));	
 	if((char*)tofree>=(char*)(&(myMem[2])) && (char*)tofree<=(char*)(&(myMem[4095]))){
