@@ -78,9 +78,10 @@ printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myM
 			char currsizebits = getsizebits(*(curr));
 			int currsize = bin2int(currsizebits, *(curr+1));
 			printf("\n ITERATING:Curr: %X , currsize: %d \n\n", curr, currsize);
+			
 			if ((char*)(curr+2) > (char*)tofree){   // pointer is not pointing at the starting address of a block
 				printf("Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
-				break;
+				return;
 			}
 			else if((char*)(curr+2) == tofree){
 			
@@ -145,6 +146,10 @@ printBin(*(curr), *(curr+1));
 printf("Curr before %X  Curr+1:%X   Curr Now: ", curr, curr+1);
 			curr = (char*)(curr+2+currsize);
 printf("%X    Currsize:%d   \n", curr, currsize);
+if ((char*)(curr+2) > (char*)tofree){   // pointer is not pointing at the starting address of a block
+				printf("12Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
+				return;
+			}
 
 		}
 	}
