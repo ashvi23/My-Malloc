@@ -251,11 +251,7 @@ int bitadd(unsigned char high11, unsigned char low11, unsigned char high22, unsi
 void combineNext(char* curr, char* next){
 	int nextinusebit = getbit(*next, 7);
 	if (nextinusebit == 0){
-		char currhibits=getsizebits(*curr);
-	    char nexthibits=getsizebits(*next);
-		int currNum=bin2int(currhibits, *(curr+1));
-		int nextNum=bin2int(nexthibits,*(next+1));
-		int sum= bitadd(*curr, currlowbits, *next, nextlowbits);
+		int sum= bitadd(*curr, *(curr+1) , *next, *(next+1) );
 		sum = sum+2; // add next's meta data 
 		splitBin(sum, curr, curr+1);
 		setInUse(0, curr);
@@ -265,9 +261,7 @@ void combineNext(char* curr, char* next){
 void combinePrev(char* curr, char* prev){
 	int previnusebit = getbit(*prev, 7);
 	if (previnusebit == 0){
-		char currlowbits = *(curr+1);
-		char prevlowbits = *(prev+1);
-		int sum= bitadd( *prev, prevlowbits, *curr, currlowbits);
+		int sum= bitadd( *prev, *(prev+1), *curr,*(curr+1));
 		sum = sum+2;
 		splitBin(sum, prev, prev+1);
 		setInUse(0, prev);
