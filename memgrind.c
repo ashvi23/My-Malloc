@@ -16,9 +16,9 @@ double sumtimeC=0;
 double sumtimeD=0;
 double sumtimeE=0;
 double sumtimeF=0;
-//int*ptrarr2[150];
+int* ptrarr2[150];
 // case a
-/*time(&starttime);//get time at start
+time(&starttime);//get time at start
 for(int i =0 ; i< 150; i++){
 printf("inside case a\n");
   ptrarr2[i] = (int*) malloc(1);
@@ -29,7 +29,7 @@ time(&endtime);//get time at end
 difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeA+=difference;
 printf("case a done\n");
-//case b*/
+//case b
 int *ptrarr[50];
 int malcounter=0;
 int *ptr;
@@ -53,8 +53,8 @@ difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeB+=difference;
 printf("case b done\n");
 
-/*/ case c
-int malcounter = 0;
+// case c
+malcounter = 0;
 int freedptr = 0;
 int ptr2free =-1;
 int freeindex =0;
@@ -252,7 +252,7 @@ for(int i=index-1; i>=0; i--){
 		printf("FREEING PTRARRAY AT INDEX %d\n", i);
 		free((alternptrArr[i]));
 		}
-	}*/
+	}
 printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  END OF F &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
 //print mean times
 //printf("Mean time of protocol A was %lf\n", (sumtimeA/100));
