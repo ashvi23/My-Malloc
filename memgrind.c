@@ -29,7 +29,7 @@ time(&endtime);//get time at end
 difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeA+=difference;
 printf("case a done\n");
-//case b
+//case b*/
 int *ptrarr[50];
 int malcounter=0;
 int *ptr;
@@ -53,7 +53,7 @@ difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeB+=difference;
 printf("case b done\n");
 
-// case c*/
+/*/ case c
 int malcounter = 0;
 int freedptr = 0;
 int ptr2free =-1;
@@ -62,7 +62,7 @@ int* pointers[50];
 int mallocindex =0;
   int random;
  srand(time(NULL));
-/*time(&starttime);//get time at start
+time(&starttime);//get time at start
   while(malcounter <=50){
    random = rand()%2;
    printf("\n\n*************  START  *********************\n");
@@ -105,7 +105,7 @@ sumtimeC+=difference;
 printf("case c done\n");
 
 
-  //case d*/
+  //case d
   int memleft=4092;  //the amount of memory left
   int memalloc =0; // the total of memory that is currently allocated
   int* pointers2[50]; // pointer array to all of allocations
@@ -191,7 +191,7 @@ printf("case d done\n");
 
 
 
-/*
+
 int *fiboptrArr[100];
 int prevprev=0;
 int prev=1;
@@ -256,9 +256,9 @@ for(int i=index-1; i>=0; i--){
 printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  END OF F &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
 //print mean times
 //printf("Mean time of protocol A was %lf\n", (sumtimeA/100));
-//printf("Mean time of protocol B was %lf\n", (sumtimeB/100));
+printf("Mean time of protocol B was %lf\n", (sumtimeB/100));
 //printf("Mean time of protocol C was %lf\n", (sumtimeC/100));
-printf("Mean time of protocol D was %lf\n", (sumtimeD/100));
+//printf("Mean time of protocol D was %lf\n", (sumtimeD/100));
 //printf("Mean time of protocol E was %lf\n", (sumtimeE/100));
 //printf("Mean time of protocol F was %lf\n", (sumtimeF/100));
 return 0;
