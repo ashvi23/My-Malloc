@@ -232,28 +232,28 @@ for(int i=index-1; i>=0; i--){
 //begin of F
 	//srand(time(0));
 	int* alternptrArr[250];
+	int* alternptr;
 	index=0;
 	random=0;
 	while(sum<=4092 && index<250){
-		if((index/4)==0){
-			//printf("in F\n");
-			free(alternptrArr[index-1]);//every third element gets freed
-			alternptrArr[index-1]=NULL;
-			}
-		random=abs(rand()%64);
+		random=rand()%64;
 		printf("CURRENT SUM %d\n", sum);
-		alternptrArr[index]=(int*)malloc(random);
+		alternptr=(int*)malloc(random);
+		alternptrArr[index]=alternptr;
+		if((index%3)==0){
+			printf("in F, freeing at index: %d\n", index);
+			free(alternptrArr[index]);//every third element gets freed
+			alternptrArr[index]=NULL;
+			}
 		index++;
 		sum+=random+2;
 	}
-	for(int i=0; i<250; i++){
+	for(int i=0; i<index; i++){
 	
 		if(alternptrArr[i]!=NULL){
 		printf("FREEING PTRARRAY AT INDEX %d\n", i);
 		free((alternptrArr[i]));
-		}
-	}
-printf("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&  END OF F &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n");
+		}}
 //print mean times
 //printf("Mean time of protocol A was %lf\n", (sumtimeA/100));
 printf("Mean time of protocol B was %lf\n", (sumtimeB/100));
