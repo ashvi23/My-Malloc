@@ -43,7 +43,6 @@ int *ptrarr[50];
 int malcounter=0;
 int *ptr;
 for(b=0; b<100; b++){
-printf("b=%d\n", b);
 time(&starttime);//get time at start
 int x ;
 for(x =0; x<3; x++){
@@ -54,7 +53,6 @@ for(i =0; i< 50; i++){
   if(malcounter == 50){
     int j;
     for (j =0; j<malcounter;j++ ){
-	printf("freeing\n");
       free(ptrarr[j]);
       ptrarr[j]=NULL;
   }
@@ -66,6 +64,7 @@ time(&endtime);//get time at end
 difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeB+=difference;
 }
+printf("end of b\n");
 // case c
 malcounter = 0;
 int freedptr = 0;
@@ -111,7 +110,7 @@ time(&endtime);//get time at end
 difference=difftime(endtime, starttime);//save runtime of iteration
 sumtimeC+=difference;
 }
-
+printf("end of c\n");
   //case d
   int memleft=4092;  //the amount of memory left
   int memalloc =0; // the total of memory that is currently allocated
@@ -130,13 +129,16 @@ for(d=0; d<100; d++){
 	 if (memleft >0){
 	    random = rand()%2;
 	    if(random ==0){// malloc if even
-	      random = rand();
-	      while(random < 1 || random > 64){
+	      random = (rand()%64);
+		if(random==0){
+			random=64;
+		}
+	      /*while(random < 1 || random > 64){
 		random = rand();
 		if (random <=64 && random >= 1){
 		  break;
 		}
-	      }
+	      }*/
 	      if(memleft >=random){
 		pointers2[mallocindex]= (int*)malloc(random);
 		memarr[mallocindex] = random;
@@ -179,6 +181,7 @@ for(d=0; d<100; d++){
 	difference=difftime(endtime, starttime);//save runtime of iteration
 	sumtimeD+=difference;
 }
+printf("end of d\n");
 int *fiboptrArr[100];
 int index=0;//used in E and F
 int sum=0;//used in E and F
@@ -215,6 +218,7 @@ for(e=0; e<100; e++){
 	difference=difftime(endtime, starttime);//save runtime of iteration
 	sumtimeD+=difference;
 }
+printf("end of e\n");
 //F begins here
 int* alternptrArr[250];
 int* alternptr;
@@ -224,6 +228,9 @@ for(f=0; f<100; f++){
 	random=0;
 	while(sum<=4092 && index<250){
 		random=rand()%64;
+		if(random==0){
+			random=64;
+		}
 		alternptr=(int*)malloc(random);
 		alternptrArr[index]=alternptr;
 		if((index%3)==0){
@@ -242,6 +249,7 @@ for(f=0; f<100; f++){
 	difference=difftime(endtime, starttime);//save runtime of iteration
 	sumtimeD+=difference;
 }
+printf("end of f\n");
 //print mean times
 printf("Mean time of protocol A was %lf\n", (sumtimeA/100));
 printf("Mean time of protocol B was %lf\n", (sumtimeB/100));
