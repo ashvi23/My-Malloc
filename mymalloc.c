@@ -54,7 +54,7 @@ void myfree(void *tofree, char *filename, int linenum){
 	int firstbytes=bin2int(*first, *second);
 	//printf("metadata being freed: ");
 	//printBin(*((char*)(tofree)-2), *((char*)(tofree)-1));
-	printf("TO FREE ADDRESS: %X \n", (char*)tofree);
+	//printf("TO FREE ADDRESS: %X \n", (char*)tofree);
 	if ((char*)tofree == NULL){
 	printf("Error in %s line %d: Pointer received is NULL. \n", __FILE__, __LINE__);
 	return;
@@ -67,7 +67,7 @@ void myfree(void *tofree, char *filename, int linenum){
 	printf("Error in %s line %d: Pointer is not in range of memory\n", __FILE__, __LINE__);
 	return;
 	}
-printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myMem[4095])));	
+//printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myMem[4095])));	
 	if((char*)tofree>=(char*)(&(myMem[2])) && (char*)tofree<=(char*)(&(myMem[4095]))){
 
 		char *curr = firstmeta;
@@ -77,7 +77,7 @@ printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myM
 		while(curr <= (&(myMem[4095]))){
 			char currsizebits = getsizebits(*(curr));
 			int currsize = bin2int(currsizebits, *(curr+1));
-			printf("\n ITERATING:Curr: %X , currsize: %d \n\n", curr, currsize);
+			//printf("\n ITERATING:Curr: %X , currsize: %d \n\n", curr, currsize);
 			
 			if ((char*)(curr+2) > (char*)tofree){   // pointer is not pointing at the starting address of a block
 				printf("Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
@@ -85,12 +85,12 @@ printf("in free: %X  first: %X  last: %X\n", (char*)tofree,(&(myMem[2])), (&(myM
 			}
 			else if((char*)(curr+2) == tofree){
 			
-printf("INSIDE POINTER EQUALS FREE\n");
+//printf("INSIDE POINTER EQUALS FREE\n");
 				int isValid = getbit(*(curr), 15); //get inuse bit
-				printf("In free found address:   ");
-				printBin(*curr, *(curr+1));
+				//printf("In free found address:   ");
+				//printBin(*curr, *(curr+1));
 //break;
-printf("isValid: %d\n", isValid);
+//printf("isValid: %d\n", isValid);
 				if (isValid == 0){  // address already freed
 					printf("Error in %s line %d: Pointer is already freed.\n", __FILE__, __LINE__);
 					return;
@@ -128,7 +128,7 @@ printf("isValid: %d\n", isValid);
 						else{
 							printf("PREV NOT NULL && NEXT NOT NULL\n");
 							next = (curr+2+currsize);
-							printf("prev: %X curr: %X next: %X currsize: %d \n", prev, curr, next, currsize);
+							//printf("prev: %X curr: %X next: %X currsize: %d \n", prev, curr, next, currsize);
 							combineBoth(prev, curr, next);
 							printf("combined both\n");
 							
@@ -142,11 +142,11 @@ printf("isValid: %d\n", isValid);
 
 			}
 			//update pointers
-printBin(*(curr), *(curr+1));
+//printBin(*(curr), *(curr+1));
 			prev = curr;
-printf("Curr before %X  Curr+1:%X   Curr Now: ", curr, curr+1);
+//printf("Curr before %X  Curr+1:%X   Curr Now: ", curr, curr+1);
 			curr = (char*)(curr+2+currsize);
-printf("%X    Currsize:%d   \n", curr, currsize);
+//printf("%X    Currsize:%d   \n", curr, currsize);
 if ((char*)(curr+2) > (char*)tofree){   // pointer is not pointing at the starting address of a block
 				printf("12Error in %s line %d: Pointer is not the one given by malloc\n", __FILE__, __LINE__);
 				return;
@@ -164,7 +164,7 @@ char* splitBlock(char* curr, int blockSize, int dataSize){
      //printf("in split block:  ");
 	//printBin(*(hi), *(lo));
       if((blockSize-3)>dataSize){//if block can fit at least two bytes of free space, including metadata, make free space
-         printf("DOING THE SPLITS\n");
+         //printf("DOING THE SPLITS\n");
           splitBin(dataSize, hi, lo);//set curr's size to the size of data requested (truncating it)
      	//printf("line 128:    ");
      	//printBin(*(hi), *(lo));
@@ -246,9 +246,9 @@ char* mallocTraverse(char* curr, int dataSize){
       //break;
       char hiBits=getsizebits(*curr);//blocking out in use bit to get size of block
       int currBlockSize=bin2int(hiBits, *(curr+1));//getting block size of current block
-      printf("in use: %d curr block: %d, datasize: %d\n", inUse, currBlockSize, dataSize);
-	  printf("current metadata in traverse: ");
-      printBin(*(curr),*(curr+1));
+      //printf("in use: %d curr block: %d, datasize: %d\n", inUse, currBlockSize, dataSize);
+	  //printf("current metadata in traverse: ");
+      //printBin(*(curr),*(curr+1));
       if(inUse==0 && currBlockSize>=dataSize){//if there's enough space to return to the user
       	  printf("currBlockSize: %d\n", currBlockSize);
           curr=splitBlock(curr, currBlockSize, dataSize);//prepare it to return
@@ -356,17 +356,17 @@ void combineNext(char* curr, char* next){
 		int currNum=bin2int(currhibits, currlowbits);
 		int nextNum=bin2int(nexthibits,nextlowbits);
 		printf("currnum: %d \n nextnum: %d\n", currNum, nextNum);
-		printf("curr: ");
-		printBin(*(curr), *(curr+1));
-		printf("next: ");
-		printBin(*(next), *(next+1));
+		//printf("curr: ");
+		//printBin(*(curr), *(curr+1));
+		//printf("next: ");
+		//printBin(*(next), *(next+1));
 		int sum= bitadd(*curr, currlowbits, *next, nextlowbits);
 		sum = sum+2; // add next's meta data 
 		printf("sum is: %d \n", sum);
 		splitBin(sum, curr, curr+1);
-		printf("curr new is:  ");
+		//printf("curr new is:  ");
 		setInUse(0, curr);
-		printBin(*(curr), *(curr+1));
+		//printBin(*(curr), *(curr+1));
 		printf("Curr and Next combined.\n");
 		printf("address after combining: %X \n", curr);
 		char hibyte=getsizebits(*curr);
@@ -383,25 +383,25 @@ void combinePrev(char* curr, char* prev){
 	if (previnusebit == 0){
 		char currlowbits = *(curr+1);
 		char prevlowbits = *(prev+1);
-		printf("Starting combining process. \n");
-		printf("curr: ");
-		printBin(*(curr), *(curr+1));
-		printf("prev: ");
-		printBin(*(prev), *(prev+1));
+		//printf("Starting combining process. \n");
+		//printf("curr: ");
+		//printBin(*(curr), *(curr+1));
+		//printf("prev: ");
+		//printBin(*(prev), *(prev+1));
 		
 		int sum= bitadd( *prev, prevlowbits, *curr, currlowbits);
 		sum = sum+2;
-		printf("sum: %d\n", sum);
-		printf("prev and curr binaries :");
-		printBin(*(prev), *(prev +1));
-		printBin(*(curr), *(curr +1));
+		//printf("sum: %d\n", sum);
+		//printf("prev and curr binaries :");
+		//printBin(*(prev), *(prev +1));
+		//printBin(*(curr), *(curr +1));
 		
 		splitBin(sum, prev, prev+1);
 		setInUse(0, prev);
 		char hibyte=getsizebits(*prev);
 		int currsize=bin2int(hibyte, *(prev+1));
 		printf("size of combined block: %d\n", currsize);
-		printf("Curr and Prev combined.\n");
+		//printf("Curr and Prev combined.\n");
 	}
 	else if (previnusebit ==1){
 		printf("Can't Combine. Prev is inuse.\n");
@@ -417,7 +417,7 @@ void combineBoth(char* prev, char* curr, char* next){
 	if (previnuse == 0){
 	combinePrev(curr, prev);
 	int abc = bin2int(*(prev),*(prev+1));
-	printf("\n\n FINAL BLOCK:  %d \n\n", abc);
+	//printf("\n\n FINAL BLOCK:  %d \n\n", abc);
 	}
 	
 	printf("next in use bit: %d  prev in use bit: %d\n" ,nextinuse, previnuse );
