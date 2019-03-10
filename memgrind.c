@@ -24,11 +24,11 @@ int c=0;
 int d=0;
 int e=0;
 int f=0;
+int i=0;
 // case a
 for(a=0; a<100;a++){
 time(&starttime);//get time at start
-int i=0;
-for( i =0 ; i< 150; i++){
+for(i=0 ; i< 150; i++){
   ptrarr2[i] = (int*) malloc(1);
   free(ptrarr2[i]);
 ptrarr2[i] = NULL;
@@ -117,97 +117,107 @@ sumtimeC+=difference;
   int memarr[50];// stores the amount of memory mallocd on each malloc
 
 for(d=0; d<100; d++){
-  freedptr=0; //amount of pointers that have been freed
-  freeindex=0; // index to free at, starts at 0 and frees sequentially. used for pointers2
-  malcounter=0; // amount of times malloc has been called
-  ptr2free =-1; // amount of pointers left to free
-  mallocindex=0; // where to store the next mallocd pointer in pointers2
-time(&starttime);//get time at start
-while(malcounter<=50){
- if (memleft >0){
-    random = rand()%2;
-    if(random ==0){// malloc if even
-      random = rand();
-      while(random < 1 || random > 64){
-        random = rand();
-        if (random <=64 && random >= 1){
-          break;
-        }
-      }
-      if(memleft >=random){
-        pointers2[mallocindex]= (int*)malloc(random);
-        memarr[mallocindex] = random;
-        memalloc +=random;
-        mallocindex++;
-        malcounter++;
-        memleft-=random;
-      }
-    }
-    else if (random ==1){//free if odd
-      if(ptr2free!=0&& malcounter!=0){
-        free(pointers2[freeindex]);
-        memalloc = memalloc - memarr[freeindex];
-        freeindex++;
-        freedptr++;
-        ptr2free = malcounter-freedptr;
-        memleft = 4092- memalloc;
-        }
-    }
-  }
-  if (malcounter ==50){
-    break;
-  }
-}
-//if(malcounter ==50){
-  while(freeindex <=50){
-    free(pointers2[freeindex]);
-    freedptr++;
-    ptr2free = malcounter -freedptr;
-    memalloc = memalloc - memarr[freeindex];
-    freeindex++;
-    memleft = 4092- memalloc;
-    
-    if(ptr2free == 0){
-      break;
-    }
-   }
+	  memleft=4092;
+	  freedptr=0; //amount of pointers that have been freed
+	  freeindex=0; // index to free at, starts at 0 and frees sequentially. used for pointers2
+	  malcounter=0; // amount of times malloc has been called
+	  ptr2free =-1; // amount of pointers left to free
+	  mallocindex=0; // where to store the next mallocd pointer in pointers2
+	time(&starttime);//get time at start
+	while(malcounter<=50){
+	 if (memleft >0){
+	    random = rand()%2;
+	    if(random ==0){// malloc if even
+	      random = rand();
+	      while(random < 1 || random > 64){
+		random = rand();
+		if (random <=64 && random >= 1){
+		  break;
+		}
+	      }
+	      if(memleft >=random){
+		pointers2[mallocindex]= (int*)malloc(random);
+		memarr[mallocindex] = random;
+		memalloc +=random;
+		mallocindex++;
+		malcounter++;
+		memleft-=random;
+	      }
+	    }
+	    else if (random ==1){//free if odd
+	      if(ptr2free!=0&& malcounter!=0){
+		free(pointers2[freeindex]);
+		memalloc = memalloc - memarr[freeindex];
+		freeindex++;
+		freedptr++;
+		ptr2free = malcounter-freedptr;
+		memleft = 4092- memalloc;
+		}
+	    }
+	  }
+	  if (malcounter ==50){
+	    break;
+	  }
+	}
+	//if(malcounter ==50){
+	  while(freeindex <=50){
+	    free(pointers2[freeindex]);
+	    freedptr++;
+	    ptr2free = malcounter -freedptr;
+	    memalloc = memalloc - memarr[freeindex];
+	    freeindex++;
+	    memleft = 4092- memalloc;
+	    
+	    if(ptr2free == 0){
+	      break;
+	    }
+	   }
 
-time(&endtime);//get time at end
-difference=difftime(endtime, starttime);//save runtime of iteration
-sumtimeD+=difference;
+	time(&endtime);//get time at end
+	difference=difftime(endtime, starttime);//save runtime of iteration
+	sumtimeD+=difference;
 }
 int *fiboptrArr[100];
-int prevprev=0;
-int prev=1;
-int sum=0;
-int totalmem=0;
-int index=0;
-//case E
-while(totalmem<(4092/2)){
-  sum=prevprev+prev;
-  fiboptrArr[index]= (int*)malloc(sum);
-  prevprev=prev;
-  prev=sum;
-  totalmem+=(sum+2);
-  index++;
+int index=0;//used in E and F
+int sum=0;//used in E and F
+for(e=0; e<100; e++){
+	time(&starttime);//get time at start
+	int prevprev=0;
+	int prev=1;
+	int totalmem=0;
+	index=0;
+	//case E
+	while(totalmem<(4092/2)){
+	  sum=prevprev+prev;
+	  fiboptrArr[index]= (int*)malloc(sum);
+	  prevprev=prev;
+	  prev=sum;
+	  totalmem+=(sum+2);
+	  index++;
+	}
+	  fiboptrArr[index]= (int*)malloc(prevprev);
+	  totalmem+=(prevprev+2);
+	  index++;
+	while(totalmem+(prev-prevprev)<(4092)&& sum>1){
+	  sum=prev-prevprev;
+	  fiboptrArr[index]= (int*)malloc(sum);
+	  prev=prevprev;
+	  prevprev=sum;
+	  totalmem+=(sum+2);
+	  index++;
+	}
+	for(i=index-1; i>=0; i--){
+	  free(fiboptrArr[i]);
+	}
+	time(&endtime);//get time at end
+	difference=difftime(endtime, starttime);//save runtime of iteration
+	sumtimeD+=difference;
 }
-  fiboptrArr[index]= (int*)malloc(prevprev);
-  totalmem+=(prevprev+2);
-  index++;
-while(totalmem+(prev-prevprev)<(4092)&& sum>1){
-  sum=prev-prevprev;
-  fiboptrArr[index]= (int*)malloc(sum);
-  prev=prevprev;
-  prevprev=sum;
-  totalmem+=(sum+2);
-  index++;
-}
-
-for(i=index-1; i>=0; i--){
-  free(fiboptrArr[i]);
-}
- 	int* alternptrArr[250];
-	int* alternptr;
+//F begins here
+int* alternptrArr[250];
+int* alternptr;
+for(f=0; f<100; f++){
+	time(&starttime);//get time at start
 	index=0;
 	random=0;
 	while(sum<=4092 && index<250){
@@ -226,6 +236,9 @@ for(i=index-1; i>=0; i--){
 		if(alternptrArr[i]!=NULL){
 		free((alternptrArr[i]));
 		}}
+	time(&endtime);//get time at end
+	difference=difftime(endtime, starttime);//save runtime of iteration
+	sumtimeD+=difference;
 }
 //print mean times
 printf("Mean time of protocol A was %lf\n", (sumtimeA/100));
