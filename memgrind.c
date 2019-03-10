@@ -43,6 +43,7 @@ int *ptrarr[50];
 int malcounter=0;
 int *ptr;
 for(b=0; b<100; b++){
+printf("b=%d\n", b);
 time(&starttime);//get time at start
 int x ;
 for(x =0; x<3; x++){
@@ -53,6 +54,7 @@ for(i =0; i< 50; i++){
   if(malcounter == 50){
     int j;
     for (j =0; j<malcounter;j++ ){
+	printf("freeing\n");
       free(ptrarr[j]);
       ptrarr[j]=NULL;
   }
