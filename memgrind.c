@@ -8,8 +8,6 @@
 #define free(x) myfree(x,__FILE__,__LINE__)
 
 int main (int argc, char**argv){
-time_t starttime;
-time_t endtime;
 double difference=0;
 double sumtimeA=0;
 double sumtimeB=0;
@@ -42,7 +40,6 @@ gettimeofday(&end, NULL);
 difference=((end.tv_sec-start.tv_sec)*1000000)+(end.tv_usec-start.tv_usec);//save runtime of iteration
 sumtimeA+=difference;
 }
-printf("end of case a\n");
 //case b
 int *ptrarr[50];
 int malcounter=0;
@@ -69,7 +66,6 @@ gettimeofday(&end, NULL);//get time at end
 difference=((end.tv_sec-start.tv_sec)*1000000)+(end.tv_usec-start.tv_usec);//save runtime of iteration
 sumtimeB+=difference;
 }
-printf("end of b\n");
 // case c
 malcounter = 0;
 int freedptr = 0;
@@ -115,7 +111,6 @@ gettimeofday(&end, NULL);//get time at end
 difference=((end.tv_sec-start.tv_sec)*1000000)+(end.tv_usec-start.tv_usec);//save runtime of iteration
 sumtimeC+=difference;
 }
-printf("end of c\n");
   //case d
   int memleft=4092;  //the amount of memory left
   int memalloc =0; // the total of memory that is currently allocated
@@ -186,7 +181,6 @@ for(d=0; d<100; d++){
 	difference=((end.tv_sec-start.tv_sec)*1000000)+(end.tv_usec-start.tv_usec);//save runtime of iteration
 	sumtimeD+=difference;
 }
-printf("end of d\n");
 int *fiboptrArr[100];
 int index=0;//used in E and F
 int sum=0;//used in E and F
@@ -223,7 +217,6 @@ for(e=0; e<100; e++){
 	difference=((end.tv_sec-start.tv_sec)*1000000)+(end.tv_usec-start.tv_usec);//save runtime of iteration
 	sumtimeD+=difference;
 }
-printf("end of e\n");
 //F begins here
 int* alternptrArr[250];
 int* alternptr;
@@ -284,11 +277,6 @@ for(f=0; f<100; f++){
 	testptrArr[0]=testptr;
 	free((testptrArr[0]));
 }
-printf("end of f\n");
-
-
-
-
 //print mean times
 printf("Mean time of protocol A was %lf milliseconds\n", (sumtimeA/100));
 printf("Mean time of protocol B was %lf milliseconds\n", (sumtimeB/100));
