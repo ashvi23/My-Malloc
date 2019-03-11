@@ -87,4 +87,5 @@ Findings:
 	
 	The workloads helped verify that we are able to deal with extremely small mallocs of 1 byte. We are able to give the user exactly what they ask for. Freeing the one byte pointers showed immediately that free worked. When printing out addresses of the pointers given by malloc showed that each of the 50 pointers were of the same address because they were freed after the malloc call. 
 	For B, the workload tested free's fragmentation algorithms. By freeing pointers one by one, we are required to combine the blocks if we want to return to the original free block of 4092. 
-	For C, mallocing random bytes tested malloc's ability to take in any given request for bytes and evaluate it. If the request can be fulfilled, malloc sent back a pointer. 
+	C verified that free wont work on not mallocd array. Shows that program can handle what is asked for regardless of when
+	For D, mallocing random bytes tested malloc's ability to take in any given request for bytes and evaluate it. If the request can be fulfilled, malloc sent back a pointer. 
