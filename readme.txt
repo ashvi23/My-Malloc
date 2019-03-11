@@ -1,7 +1,7 @@
 Extra Credit:
 - Metadata size: 2 Bytes
 The meta data was sorted in chars because the chars are guaranteed to be a single byte. We are using two chars to store all of the metadata (). 
-we bit shifted and masked in order to store data. Since the memory array is 4096 bytes, we need a minimum of 12 bits (2^12=4096) to store the size. the 12 rightmost bits store the size bits and the left most bit is the in use bit. if the block hs been given to the user by malloc then the in use bit will be 1 else, if the block is free the in use bit is 0. Were using 16 bits however, we really only need 13 bits, however, the extra 3 bits that are wasted do not make much of a difference in terms of space usage. the 3 bits will take some time to add up to a significant amount of bytes. Keeping the extra 3 bits help storing and accessing data easier because it makes up 2 blocks of the array. 
+we bit shifted and masked in order to store data. Since the memory array is 4096 bytes, we need a minimum of 12 bits (2^12=4096) to store the size. Since the key takes up 2 bytes and metadata blocks take up 2 bytes, the most we can allocate in one block is 4092, therefore, 2^12 fits our requirements in terms of bits. The 12 rightmost bits store the size bits and the left most bit is the in use bit. If the block has been given to the user by malloc then the in use bit will be 1 else, if the block is free the in use bit is 0. Were using 16 bits however, we really only need 13 bits, however, the extra 3 bits that are wasted do not make much of a difference in terms of space usage. The 3 bits will take some time to add up to a significant amount of bytes. Keeping the extra 3 bits help storing and accessing data easier because it makes up 2 blocks of the array. 
 
 Metadata structure: | 1 000 1111| 11110000|  
 					  ^     ^
@@ -37,7 +37,7 @@ Malloc
 Free:
 - Algorithm:
 	- Traversing: 
-	I start at the first metadata (&mem[2]) and move to (metadata size +2) and continue until I find the pointer given in by the user or the current pointer to the meta data is greater than the pointer received. 
+	I start at the first metadata (&mem[2]) and move to (metadata size +2) and continue until I find the pointer given in by the user or the current pointer to the meta data is greater than the pointer received. Traverses by comparing pointers and accessing size bits in order to move to the next metadata.
 
 
 - Fragmentation:
@@ -80,3 +80,11 @@ If any of the following errors were encountered with the pointer received, the e
 				where pointer should be pointing  		where pointer is pointing
 									^
 if pointer sent in doesnt = address | of above pointer, then return error 
+
+
+Findings:
+	We are able to confirm that our version of malloc and free works because after the workloads were completed, when the first block's size was printed out, it equaled 4092, which is the amount memory we started out with. 
+	
+	The workloads helped verify that we are able to deal with extremely small mallocs of 1 byte. We are able to give the user exactly what they ask for. Freeing the one byte pointers showed immediately that free worked. When printing out addresses of the pointers given by malloc showed that each of the 50 pointers were of the same address because they were freed after the malloc call. 
+	For B, the workload tested free's fragmentation algorithms. By freeing pointers one by one, we are required to combine the blocks if we want to return to the original free block of 4092. 
+	For C, mallocing random bytes tested malloc's ability to take in any given request for bytes and evaluate it. If the request can be fulfilled, malloc sent back a pointer. 
