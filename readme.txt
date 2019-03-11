@@ -89,3 +89,4 @@ Findings:
 	For B, the workload tested free's fragmentation algorithms. By freeing pointers one by one, we are required to combine the blocks if we want to return to the original free block of 4092. 
 	C verified that free wont work on not mallocd array. Shows that program can handle what is asked for regardless of when
 	For D, mallocing random bytes tested malloc's ability to take in any given request for bytes and evaluate it. If the request can be fulfilled, malloc sent back a pointer. 
+	The workloads helped us find errors in our code. In one space the wrong parametor was sent in. 
