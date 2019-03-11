@@ -31,18 +31,9 @@ Malloc
 			
 		- Setting in use bits: In use bits are set using the get bit method, specifically to set a block to 'in use' status, or if a block is being split, to 'not in use'.
 	
-		- 
 	- Error Checkings
 		- size input validity: Checked for a request larger than 4092 bytes (the size of the array, minus the key bytes and the first metadata block) in the main 'mymalloc' function, and for requests less than or equal to zero (because obviously neither a negative malloc nor a malloc of size zero can occur)
-		- 
-
-
-
-
-
-
-
-
+	
 Free:
 - Algorithm:
 	- Traversing: 
