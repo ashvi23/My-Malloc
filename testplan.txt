@@ -1,0 +1,10 @@
+Plan E:
+	Fibonacci sequence:
+		Mallocs sizes sequentially according to the fibonacci sequence (ex. 1, 1, 2, 5, 8, 13, etc.), until the sum of all of the mallocs is greater than or equal to 4092/2, and then reverses the sequence, mallocing 610, 377, 233, 144... until the sum would surpass the bounds of the array, and then stops, stores pointers to all of these mallocs in an array. When this is complete, it goes into the array and frees pointers from the end of the array. This is meant to test the combinenext method in myfree, to check that combination of blocks from left to right is working accurately. The mallocing pattern is just to test if sequentially larger/ smaller spaces are malloced correctly, which is something of a test of our 'splitblock' function as well.
+
+Plan F:
+	Freeing on the third malloc:
+		Mallocs random sizes (seeded by srand, so that block sizes are truly random) under 67 bytes (so that a sufficient number of mallocs/frees can occur), however, on the third malloc, it is immediately freed. Afterwards, we go through and free all of the remaining unfreed pointers stored in our pointer array. This is meant to test freeing directly after mallocing, as well as our different methods of combining values (the blocks on either side of the one being freed, the one directly after, and directly before).  
+	After this, malloc 1000 bytes four times and free them. To test that we have freed everrything by the end of the workload, we attempt to malloc 4092 bytes. 
+	We test our splitting method by mallocing 4088 bytes (which leaves exactly enough room for metadata+2 bytes), and attempt to malloc one byte. We then free these two blocks, and check that the deallocation has occured successfully by mallocing another 4092 bytes. None of these case sshould return errors if the previous workloads have been executed successfully. 
+
