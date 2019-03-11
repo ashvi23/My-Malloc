@@ -1,6 +1,6 @@
 Extra Credit:
 - Metadata size: 2 Bytes
-The meta data was sorted in chars because the chars are guaranteed to be a single byte. We are using two chars to store all of the data. 
+The meta data was sorted in chars because the chars are guaranteed to be a single byte. We are using two chars to store all of the metadata (). 
 we bit shifted and masked in order to store data. Since the memory array is 4096 bytes, we need a minimum of 12 bits (2^12=4096) to store the size. the 12 rightmost bits store the size bits and the left most bit is the in use bit. if the block hs been given to the user by malloc then the in use bit will be 1 else, if the block is free the in use bit is 0. Were using 16 bits however, we really only need 13 bits, however, the extra 3 bits that are wasted do not make much of a difference in terms of space usage. the 3 bits will take some time to add up to a significant amount of bytes. Keeping the extra 3 bits help storing and accessing data easier because it makes up 2 blocks of the array. 
 
 Metadata structure: | 1 000 1111| 11110000|  
@@ -16,17 +16,24 @@ bin2int - takes in pointers to high and low bytes and converts it into an intege
 splitbin - takes in an integer and divides the bits into two chars to set the size of the metadata
 
 
+
 Malloc
-- Algorithm
+- Algorithm:
 
-	- Traversing
+	- Traversing: mallocTraverse
+		-Traverses through the array, checking size bits and in use bits until it reaches a block the same size as or larger than the amount of space requested that isn't in use. If such a block is found, splitblock is called, otherwise an insufficient memory message is displayed.                  
 
-	- Spliting Blocks
-		- How many bytes to give back to user
-		- Setting in use bits 
+	- Splitting Blocks: splitBlock 
+		- How many bytes to give back to user:
+			*If the space found is the exact same size as the amount of memory requested by the user, return just that, without altering the blocks adjacent to it.
+			*If the space found is larger than the amount being malloced by the user, and has enough space to store metadata plus 2 bytes of memory, the block is split into a block the same size as the size requested, and the in use bit is flipped. The adjacent block's size is set to that of the original block - user requested size, with an in use bit set to zero.
+			*If the space found is larger than the user requested size, but fewer than 4 bytes larger (2 metadata bytes + 2 data bytes), the whole block is returned to the user, without splitting.
+			
+		- Setting in use bits: In use bits are set using the get bit method, specifically to set a block to 'in use' status, or if a block is being split, to 'not in use'.
+	
 		- 
 	- Error Checkings
-		- size input validity
+		- size input validity: Checked for a request larger than 4092 bytes (the size of the array, minus the key bytes and the first metadata block) in the main 'mymalloc' function, and for requests less than or equal to zero (because obviously neither a negative malloc nor a malloc of size zero can occur)
 		- 
 
 
@@ -82,6 +89,3 @@ If any of the following errors were encountered with the pointer received, the e
 				where pointer should be pointing  		where pointer is pointing
 									^
 if pointer sent in doesnt = address | of above pointer, then return error 
-
-
-
